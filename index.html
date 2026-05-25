@@ -3668,17 +3668,17 @@ function filterAlumni(angkatan, btn) {
     </div>
 
     <!-- 98% stat card -->
-    <div class="md:col-span-8 relative overflow-hidden border border-ink-black/10 p-8 bento-item group bg-ink-black text-white cursor-pointer" onclick="openPrestasiModal('placement')">
-      <div class="flex items-center gap-12 h-full">
-        <div class="font-display-lg text-crimson-heritage group-hover:scale-110 transition-transform duration-300" style="font-size:5rem">
+    <div class="md:col-span-8 relative overflow-hidden border border-ink-black/10 p-6 sm:p-8 bento-item group bg-ink-black text-white cursor-pointer" onclick="openPrestasiModal('placement')">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-12 h-full">
+        <div class="font-display-lg text-crimson-heritage group-hover:scale-110 transition-transform duration-300 leading-none flex-shrink-0" style="font-size:clamp(3.5rem,14vw,5rem)">
           <span class="counter" data-target="98">0</span>%
         </div>
         <div class="flex flex-col gap-3">
-          <h4 class="font-display-lg text-3xl group-hover:translate-x-2 transition-transform duration-500">Global University Placement Rate</h4>
-          <p class="font-body-md text-white/60">Connecting our graduates to the world's most prestigious institutions.</p>
-          <button class="self-start flex items-center gap-2 border border-white/30 text-white hover:bg-white hover:text-ink-black font-label-sm text-[10px] uppercase tracking-widest px-4 py-2 transition-all duration-300">
+          <h4 class="font-display-lg group-hover:translate-x-2 transition-transform duration-500" style="font-size:clamp(1.25rem,4vw,1.875rem);line-height:1.2">Global University Placement Rate</h4>
+          <p class="font-body-md text-white/60 text-sm sm:text-base">Connecting our graduates to the world's most prestigious institutions.</p>
+          <button class="self-start flex items-center gap-2 border border-white/30 text-white hover:bg-white hover:text-ink-black font-label-sm text-[10px] uppercase tracking-widest px-4 py-2 transition-all duration-300 mt-1">
             <span class="material-symbols-outlined" style="font-size:14px">open_in_new</span>
-            Lihat Detail Prestasi
+            Lihat
           </button>
         </div>
       </div>
