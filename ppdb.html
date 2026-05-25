@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PPDB — Ignatius Global School</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link rel="icon" type="image/webp" href="logo_igs.webp"/>
+<link rel="shortcut icon" type="image/webp" href="logo_igs.webp"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; }
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:#F5F0EB; }
+  ::-webkit-scrollbar-thumb { background:#0D0D0D; }
+
+  /* ── Dual Cursor ── */
+  #cursor-dot  { width:8px;height:8px;background:#A50000;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .08s ease-out; }
+  #cursor-ring { width:32px;height:32px;border:1.5px solid #A50000;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .18s ease-out,top .18s ease-out,background .2s; }
+  body:has(a:hover) #cursor-ring,
+  body:has(button:hover) #cursor-ring { background:rgba(165,0,0,.15); }
+
+  /* ── Navbar ── */
+  #header-inner {
+    position:relative;background:rgba(255,255,255,0.92);backdrop-filter:blur(28px);
+    -webkit-backdrop-filter:blur(28px);border-radius:16px;border:1px solid rgba(165,0,0,0.18);
+    box-shadow:0 8px 40px rgba(0,0,0,0.14),0 1px 0 rgba(255,255,255,0.9) inset,0 0 0 1px rgba(165,0,0,0.06) inset;
+    padding:0 8px;transition:all 0.4s cubic-bezier(.16,1,.3,1);width:fit-content;
+    max-width:calc(100vw - 48px);margin:0 auto;overflow:visible;
+  }
+  header { display:flex;align-items:center;justify-content:center;top:16px !important;padding:0 24px !important; }
+  header.scrolled #header-inner { background:rgba(255,255,255,0.98);border-color:rgba(165,0,0,0.28);box-shadow:0 12px 48px rgba(0,0,0,0.18),0 1px 0 rgba(255,255,255,1) inset; }
+  header.scrolled #inquire-btn { background:#A50000 !important;color:#fff !important;border-color:#A50000 !important; }
+  header.scrolled #inquire-btn * { color:#fff !important; }
+  header.scrolled .nav-link { color:#1a1a1a !important; }
+  header.scrolled .nav-link:hover { color:#A50000 !important; }
+
+  .nav-sep { display:inline-block;width:1px;height:16px;background:rgba(165,0,0,0.18);margin:0 1px;vertical-align:middle; }
+  .nav-link { font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.04em;color:#1a1a1a;transition:color .25s;white-space:nowrap;position:relative; }
+  .nav-link:hover { color:#A50000; }
+  .nav-link::before { content:'';position:absolute;top:-14px;left:50%;transform:translateX(-50%) scaleX(0);transform-origin:center;width:36px;height:4px;background:#A50000;border-radius:0 0 4px 4px;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1),opacity 0.25s ease;opacity:0; }
+  .nav-link[data-active]::before,.nav-link.active::before { transform:translateX(-50%) scaleX(1);opacity:1; }
+  .nav-link[data-active],.nav-link.active { color:#A50000 !important; }
+
+  /* Mobile nav */
+  #mobile-nav { transform:translateX(100%);transition:transform .35s cubic-bezier(.16,1,.3,1); }
+  #mobile-nav.open { transform:translateX(0); }
+
+  /* Dropdown */
+  .nav-dropdown { position:relative; }
+  .nav-dropdown-menu { position:absolute;top:100%;left:50%;min-width:180px;background:#fff;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.14),0 0 0 1px rgba(0,0,0,0.06);padding:16px 0 6px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;transform:translateX(-50%) translateY(-4px);z-index:999; }
+  .nav-dropdown-menu::before { content:'';position:absolute;top:-16px;left:0;right:0;height:16px;background:transparent; }
+  .nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown:focus-within .nav-dropdown-menu { opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0); }
+  .nav-dropdown-item { display:block;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.03em;color:#1a1a1a;white-space:nowrap;transition:background .15s,color .15s; }
+  .nav-dropdown-item:hover { background:#fff5f5;color:#A50000; }
+  .nav-dropdown-item.active { background:#A50000;color:#fff !important; }
+  .nav-dropdown-arrow { display:inline-block;margin-left:3px;font-size:9px;transition:transform .2s;vertical-align:middle; }
+  .nav-dropdown:hover .nav-dropdown-arrow { transform:rotate(180deg); }
+  .nav-dropdown-divider { height:1px;background:rgba(0,0,0,0.07);margin:4px 0; }
+
+  /* ── Form ── */
+  .form-input-wrap { position:relative; }
+  .form-input-wrap::after { content:'';position:absolute;bottom:0;left:0;height:2px;width:0;background:#A50000;transition:width .4s ease; }
+  .form-input-wrap:focus-within::after { width:100%; }
+
+  /* ── KIRIM button ── */
+  .kirim-btn { position:relative;cursor:pointer; }
+  .kirim-btn::before,.kirim-btn::after { content:'';position:absolute;inset:0;pointer-events:none;z-index:0; }
+  .kirim-btn > * { position:relative;z-index:1; }
+  .kirim-btn::before { border-top:2px solid #A50000;border-right:2px solid #A50000;transform:scaleX(0) scaleY(0);transform-origin:top right;transition:transform .3s ease; }
+  .kirim-btn::after  { border-bottom:2px solid #A50000;border-left:2px solid #A50000;transform:scaleX(0) scaleY(0);transform-origin:bottom left;transition:transform .3s ease .3s; }
+  .kirim-btn:hover::before,.kirim-btn:hover::after { transform:scaleX(1) scaleY(1); }
+
+  /* ── Progress steps ── */
+  .step-dot { width:10px;height:10px;border-radius:50%;background:#D4CFC9;transition:background .3s; }
+  .step-dot.active { background:#A50000; }
+  .step-line { flex:1;height:1px;background:#D4CFC9; }
+
+  /* ── Scroll reveal ── */
+  .reveal { opacity:0;transform:translateY(32px);transition:opacity .6s ease,transform .6s ease; }
+  .reveal.visible { opacity:1;transform:translateY(0); }
+
+  /* ── Validation ── */
+  .field-error input, .field-error select, .field-error textarea {
+    border-bottom-color: #b91c1c !important;
+  }
+  .field-error .form-input-wrap::after { background:#b91c1c !important; width:100% !important; }
+  .field-valid input, .field-valid select, .field-valid textarea {
+    border-bottom-color: #15803d !important;
+  }
+  .err-msg {
+    font-family:'DM Sans',sans-serif;font-size:11px;color:#b91c1c;
+    letter-spacing:0.04em;margin-top:4px;display:none;
+  }
+  .field-error .err-msg { display:block; }
+  .valid-tick { display:none;position:absolute;right:0;bottom:12px;color:#15803d;font-size:16px; }
+  .field-valid .valid-tick { display:block; }
+
+  /* ── Submit modal ── */
+  #result-modal {
+    display:none;position:fixed;inset:0;z-index:10000;
+    background:rgba(0,0,0,0.72);backdrop-filter:blur(6px);
+    align-items:center;justify-content:center;padding:24px;
+  }
+  #result-modal.open { display:flex; }
+  #modal-card {
+    background:#fff;max-width:480px;width:100%;padding:48px 40px;
+    position:relative;animation:modalIn .4s cubic-bezier(.16,1,.3,1);
+  }
+  @keyframes modalIn { from{opacity:0;transform:translateY(24px) scale(.97)} to{opacity:1;transform:none} }
+
+  .status-icon { width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px; }
+  .status-lulus    { background:#dcfce7; }
+  .status-tidak    { background:#fee2e2; }
+  .status-menunggu { background:#fef9c3; }
+
+  .badge-lulus    { background:#dcfce7;color:#15803d;border:1px solid #86efac; }
+  .badge-tidak    { background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5; }
+  .badge-menunggu { background:#fef9c3;color:#a16207;border:1px solid #fde047; }
+
+  /* ── Back to top ── */
+  #back-top { opacity:0;pointer-events:none;transition:opacity .3s; }
+  #back-top.show { opacity:1;pointer-events:all; }
+
+  /* ── Responsive ── */
+  html, body { overflow-x:hidden;max-width:100vw; }
+  *, *::before, *::after { box-sizing:border-box; }
+  @media (max-width:639px) {
+    .py-vertical-gap { padding-top:56px !important;padding-bottom:56px !important; }
+    header { top:8px !important;padding:0 10px !important; }
+    #header-inner { width:calc(100vw - 20px) !important;max-width:calc(100vw - 20px) !important;height:52px !important;padding-left:12px !important;padding-right:8px !important; }
+    #navbar-logo { height:30px !important; }
+    #inquire-btn { display:none !important; }
+  }
+  @media (min-width:640px) and (max-width:1023px) {
+    header { top:10px !important;padding:0 12px !important; }
+    #header-inner { width:calc(100vw - 24px) !important;max-width:calc(100vw - 24px) !important;height:56px !important;padding-left:14px !important;padding-right:10px !important;display:flex !important;align-items:center !important;justify-content:space-between !important; }
+    #navbar-logo { height:36px !important; }
+  }
+  @media (max-width:420px) { #mobile-nav { width:100vw !important; } }
+
+  /* Hero breadcrumb area */
+  .ppdb-hero { background:linear-gradient(135deg, #0D0D0D 0%, #1a0000 100%);padding-top:120px;padding-bottom:64px; }
+
+  /* Section divider style */
+  fieldset { border:none;padding:0;margin:0; }
+  legend { float:none; }
+
+  /* Sticky step progress */
+  #step-bar { position:sticky;top:80px;z-index:40;background:rgba(245,240,235,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.08); }
+</style>
+
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode:"class",
+    theme:{
+      extend:{
+        colors:{
+          "ink-black":"#0D0D0D","canvas-off-white":"#F5F0EB",
+          "crimson-heritage":"#A50000","electric-midnight":"#0A1172",
+          "signal-gold":"#C9922A","on-surface":"#1d1b19","on-background":"#1d1b19",
+          "primary":"#790000","primary-container":"#a50000",
+          "surface":"#fef8f3","background":"#fef8f3",
+        },
+        borderRadius:{"DEFAULT":"0px","lg":"0px","xl":"0px","full":"9999px"},
+        spacing:{"margin-edge":"64px","container-max":"1440px","baseline":"8px","vertical-gap":"120px","gutter":"32px"},
+        fontFamily:{
+          "display-lg":["EB Garamond"],"label-sm":["DM Sans"],"display-xl":["EB Garamond"],
+          "headline-lg":["EB Garamond"],"body-lg":["DM Sans"],"body-md":["DM Sans"],
+          "subheading":["DM Sans"],"headline-lg-mobile":["EB Garamond"],
+        },
+        fontSize:{
+          "display-lg":["80px",{lineHeight:"88px",letterSpacing:"-0.02em",fontWeight:"400"}],
+          "label-sm":["12px",{lineHeight:"16px",letterSpacing:"0.05em",fontWeight:"700"}],
+          "display-xl":["120px",{lineHeight:"110px",letterSpacing:"-0.04em",fontWeight:"400"}],
+          "headline-lg":["48px",{lineHeight:"56px",fontWeight:"400"}],
+          "body-lg":["18px",{lineHeight:"32px",fontWeight:"400"}],
+          "body-md":["16px",{lineHeight:"28px",fontWeight:"400"}],
+          "subheading":["18px",{lineHeight:"24px",letterSpacing:"0.1em",fontWeight:"500"}],
+        }
+      }
+    }
+  }
+</script>
+</head>
+<body class="bg-canvas-off-white text-ink-black font-body-md overflow-x-hidden selection:bg-crimson-heritage selection:text-white">
+
+<!-- Custom Cursor -->
+<div id="cursor-dot" class="hidden md:block"></div>
+<div id="cursor-ring" class="hidden md:block"></div>
+
+<!-- ═══════════════════ NAVBAR ═══════════════════ -->
+<header id="header" class="fixed top-4 left-0 w-full z-50 transition-all duration-500 flex justify-center items-center pointer-events-none px-6" style="background:transparent;box-shadow:none">
+  <div id="header-inner" class="pointer-events-auto flex items-center justify-between w-full" style="height:62px;padding-left:18px;padding-right:14px;max-width:1200px;">
+
+    <a href="index.html" class="flex items-center gap-3 flex-shrink-0">
+      <img id="navbar-logo" src="logo_igs.webp" alt="IGS Logo"
+        onerror="this.style.display='none';document.getElementById('navbar-logo-fallback').style.display='flex'"
+        style="height:40px;width:auto;object-fit:contain;flex-shrink:0">
+      <div id="navbar-logo-fallback" style="width:40px;height:40px;border-radius:50%;background:#A50000;display:none;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="font-family:'EB Garamond',serif;font-size:16px;font-style:italic;font-weight:700;color:#fff;letter-spacing:-0.02em">IGS</span>
+      </div>
+      <div class="hidden sm:block">
+        <div style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:800;color:#0D0D0D;letter-spacing:0.12em;text-transform:uppercase;line-height:1">IGNATIUS</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:400;color:#A50000;letter-spacing:0.08em;text-transform:uppercase;line-height:1.4">Global School</div>
+      </div>
+    </a>
+
+    <div class="lg:hidden absolute left-0 right-0 flex justify-center items-center pointer-events-none" style="z-index:0">
+      <div class="text-center" style="pointer-events:none">
+        <div style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:800;color:#0D0D0D;letter-spacing:0.14em;text-transform:uppercase;line-height:1.1">IGNATIUS</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:9px;font-weight:400;color:#A50000;letter-spacing:0.1em;text-transform:uppercase;line-height:1.4">Global School</div>
+      </div>
+    </div>
+
+    <nav class="hidden lg:flex items-center mx-3" style="gap:0">
+      <a href="index.html" class="nav-link px-3 py-2" style="color:#1a1a1a">Home</a>
+      <span class="nav-sep"></span>
+      <div class="nav-dropdown">
+        <button class="nav-link px-3 py-2 flex items-center" style="color:#1a1a1a;background:none;border:none;cursor:pointer">
+          PPDB <span class="nav-dropdown-arrow">▼</span>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="ppdb.html" class="nav-dropdown-item active">Formulir Pendaftaran</a>
+          <div class="nav-dropdown-divider"></div>
+          <a href="cek-lulus.html" class="nav-dropdown-item">Cek Lulus</a>
+          <div class="nav-dropdown-divider"></div>
+          <a href="index.html#kontak" class="nav-dropdown-item">Kembali ke Beranda</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href="index.html#kontak" id="inquire-btn" class="hidden sm:block px-5 py-2 font-label-sm uppercase tracking-widest transition-all duration-300 text-xs"
+        style="border-radius:4px;border:1.5px solid #A50000;background:transparent;color:#A50000;font-weight:600;letter-spacing:0.1em;transition:all .25s">
+        ← Beranda
+      </a>
+      <button id="mobile-menu-btn" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Menu" style="color:#1a1a1a" onclick="document.getElementById('mobile-nav').classList.toggle('open')">
+        <span style="display:block;width:22px;height:2px;background:currentColor;transition:all .3s"></span>
+        <span style="display:block;width:22px;height:2px;background:currentColor;transition:all .3s"></span>
+        <span style="display:block;width:14px;height:2px;background:currentColor;transition:all .3s"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<div id="mobile-nav" class="fixed top-0 right-0 h-full w-72 z-40 flex flex-col pt-24 pb-8 px-8 overflow-y-auto" style="background:#fff;box-shadow:-4px 0 30px rgba(0,0,0,0.12)">
+  <button onclick="document.getElementById('mobile-nav').classList.remove('open')" class="absolute top-6 right-6 text-ink-black">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+  <nav class="flex flex-col gap-0">
+    <a href="index.html" class="w-full py-4 font-label-sm uppercase tracking-widest text-ink-black hover:text-crimson-heritage transition-colors border-b border-black/8 block">← Beranda</a>
+    <a href="ppdb.html" class="w-full py-4 font-label-sm uppercase tracking-widest text-crimson-heritage border-b border-black/8 block">Formulir Pendaftaran</a>
+    <a href="cek-lulus.html" class="w-full py-4 font-label-sm uppercase tracking-widest text-ink-black hover:text-crimson-heritage transition-colors border-b border-black/8 block">Cek Lulus</a>
+  </nav>
+  <a href="index.html#kontak" class="mt-8 bg-crimson-heritage text-white py-3 font-label-sm uppercase tracking-widest text-xs text-center block">Kembali ke Beranda</a>
+</div>
+<div id="mobile-backdrop" class="fixed inset-0 z-30 bg-black/40 opacity-0 pointer-events-none transition-opacity duration-300" onclick="document.getElementById('mobile-nav').classList.remove('open')"></div>
+<script>
+  const mobileNav = document.getElementById('mobile-nav');
+  const backdrop  = document.getElementById('mobile-backdrop');
+  const observer = new MutationObserver(() => {
+    const isOpen = mobileNav.classList.contains('open');
+    backdrop.style.opacity       = isOpen ? '1' : '0';
+    backdrop.style.pointerEvents = isOpen ? 'auto' : 'none';
+  });
+  observer.observe(mobileNav, { attributes: true, attributeFilter: ['class'] });
+</script>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="ppdb-hero">
+  <div class="px-6 md:px-margin-edge">
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-2 mb-8 font-label-sm text-xs uppercase tracking-widest text-white/40">
+      <a href="index.html" class="hover:text-white transition-colors">Beranda</a>
+      <span class="material-symbols-outlined text-xs" style="font-size:14px">chevron_right</span>
+      <span class="text-crimson-heritage">PPDB</span>
+    </div>
+    <p class="font-label-sm uppercase tracking-widest text-crimson-heritage text-xs mb-4">Penerimaan Peserta Didik Baru · TA 2021/2022</p>
+    <h1 class="font-display-lg leading-none tracking-tighter text-white mb-6" style="font-size:clamp(48px,8vw,96px)">FORMULIR<br/>PENDAFTARAN</h1>
+    <p class="font-body-lg text-white/60 max-w-lg">Lengkapi semua data di bawah ini dengan benar. Kolom bertanda <span class="text-crimson-heritage">*</span> wajib diisi.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════ STICKY STEP BAR ═══════════════════ -->
+<!-- <div id="step-bar" class="px-6 md:px-margin-edge py-4 hidden md:block">
+  <div class="flex items-center gap-3 max-w-3xl">
+    <div class="flex flex-col items-center gap-1">
+      <div class="step-dot active" id="sd1"></div>
+      <span class="font-label-sm text-[9px] uppercase tracking-widest text-ink-black/50">Pendaftaran</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="flex flex-col items-center gap-1">
+      <div class="step-dot" id="sd2"></div>
+      <span class="font-label-sm text-[9px] uppercase tracking-widest text-ink-black/50">Siswa</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="flex flex-col items-center gap-1">
+      <div class="step-dot" id="sd3"></div>
+      <span class="font-label-sm text-[9px] uppercase tracking-widest text-ink-black/50">Alamat</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="flex flex-col items-center gap-1">
+      <div class="step-dot" id="sd4"></div>
+      <span class="font-label-sm text-[9px] uppercase tracking-widest text-ink-black/50">Kontak</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="flex flex-col items-center gap-1">
+      <div class="step-dot" id="sd5"></div>
+      <span class="font-label-sm text-[9px] uppercase tracking-widest text-ink-black/50">Orang Tua</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="flex flex-col items-center gap-1">
+      <div class="step-dot" id="sd6"></div>
+      <span class="font-label-sm text-[9px] uppercase tracking-widest text-ink-black/50">Fisik</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="flex flex-col items-center gap-1">
+      <div class="step-dot" id="sd7"></div>
+      <span class="font-label-sm text-[9px] uppercase tracking-widest text-ink-black/50">Pernyataan</span>
+    </div>
+  </div>
+</div> -->
+
+<!-- ═══════════════════ FORM ═══════════════════ -->
+<main style="background:linear-gradient(180deg,#F5F0EB 0%,#edeae3 100%)">
+<form class="px-6 md:px-margin-edge py-vertical-gap space-y-20" id="ppdb-form" onsubmit="savePPDB(event)">
+
+  <!-- ── 01 Data Pendaftaran ── -->
+  <fieldset id="fs1" class="reveal">
+    <legend class="w-full flex items-center gap-4 mb-10">
+      <span class="font-display-lg text-4xl text-crimson-heritage leading-none">01</span>
+      <span class="flex-1 h-px bg-ink-black/20"></span>
+      <span class="font-label-sm uppercase tracking-widest text-ink-black/50 text-xs">Data Pendaftaran</span>
+    </legend>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Jenis Pendaftaran <span class="text-crimson-heritage">*</span></label>
+        <select name="jenis_pendaftaran" required class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Baru</option>
+          <option>Pindahan</option>
+        </select>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Jalur Pendaftaran <span class="text-crimson-heritage">*</span></label>
+        <select name="jalur" required class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>TA 2021 / 2022</option>
+        </select>
+      </div>
+
+      <div class="form-input-wrap md:col-span-2">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Pilihan I</label>
+        <select name="pilihan" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>SMA IPS</option>
+          <option>SMA IPA</option>
+          <option>SMP</option>
+          <option>SD IGS VETERAN</option>
+          <option>SD IGS CGC</option>
+          <option>PG / TK IGS CGC</option>
+        </select>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Nama Sekolah Asal <span class="text-crimson-heritage">*</span></label>
+        <input name="sekolah_asal" required type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="NAMA SEKOLAH"/>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Alamat Sekolah Asal <span class="text-crimson-heritage">*</span></label>
+        <input required type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="ALAMAT SEKOLAH"/>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Nomor Seri SKHUN Sebelumnya</label>
+        <input type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="NO. SERI SKHUN"/>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Nomor Seri Ijazah Sebelumnya</label>
+        <input type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="NO. SERI IJAZAH"/>
+      </div>
+
+      <div class="form-input-wrap md:col-span-2">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Prestasi yang Pernah Diraih</label>
+        <textarea class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base resize-none outline-none" rows="2" placeholder="TULISKAN PRESTASI ANDA"></textarea>
+      </div>
+
+    </div>
+  </fieldset>
+
+  <!-- ── 02 Data Siswa ── -->
+  <fieldset id="fs2" class="reveal">
+    <legend class="w-full flex items-center gap-4 mb-10">
+      <span class="font-display-lg text-4xl text-crimson-heritage leading-none">02</span>
+      <span class="flex-1 h-px bg-ink-black/20"></span>
+      <span class="font-label-sm uppercase tracking-widest text-ink-black/50 text-xs">Data Siswa</span>
+    </legend>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+
+      <div class="form-input-wrap md:col-span-2">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Nama Lengkap <span class="text-crimson-heritage">*</span></label>
+        <input name="nama" required type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-display-lg text-xl outline-none" placeholder="NAMA LENGKAP SISWA"/>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Jenis Kelamin <span class="text-crimson-heritage">*</span></label>
+        <select name="jenis_kelamin" required class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Laki-laki</option>
+          <option>Perempuan</option>
+        </select>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">NISN</label>
+        <input name="nisn" type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="NOMOR INDUK SISWA NASIONAL"/>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">NIK / KTP</label>
+        <input type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="NO. INDUK KEPENDUDUKAN"/>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Tempat Lahir <span class="text-crimson-heritage">*</span></label>
+        <input name="tempat_lahir" required type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="KOTA / KABUPATEN"/>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Tanggal Lahir <span class="text-crimson-heritage">*</span></label>
+        <input name="tanggal_lahir" required type="date" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none text-ink-black"/>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Agama <span class="text-crimson-heritage">*</span></label>
+        <select required class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Islam</option><option>Kristen / Protestan</option><option>Katholik</option>
+          <option>Hindu</option><option>Budha</option><option>Khong Hu Chu</option><option>Lainnya</option>
+        </select>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Kebutuhan Khusus</label>
+        <select class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Tidak</option><option>Tuna Netra</option><option>Tuna Rungu</option>
+          <option>Tuna Grahita Ringan</option><option>Tuna Grahita Sedang</option>
+          <option>Tuna Daksa Ringan</option><option>Tuna Daksa Sedang</option>
+          <option>Tuna Laras</option><option>Tuna Wicara</option><option>Tuna Ganda</option>
+          <option>Hiper Aktif</option><option>Cerdas Istimewa</option><option>Bakat Istimewa</option>
+          <option>Kesulitan Belajar</option><option>Narkoba</option><option>Indigo</option>
+          <option>Down Sindrome</option><option>Autis</option><option>Lainnya</option>
+        </select>
+      </div>
+
+    </div>
+  </fieldset>
+
+  <!-- ── 03 Alamat ── -->
+  <fieldset id="fs3" class="reveal">
+    <legend class="w-full flex items-center gap-4 mb-10">
+      <span class="font-display-lg text-4xl text-crimson-heritage leading-none">03</span>
+      <span class="flex-1 h-px bg-ink-black/20"></span>
+      <span class="font-label-sm uppercase tracking-widest text-ink-black/50 text-xs">Alamat & Tempat Tinggal</span>
+    </legend>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-10">
+
+      <div class="form-input-wrap md:col-span-3">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Alamat Jalan <span class="text-crimson-heritage">*</span></label>
+        <input required type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="NAMA JALAN, NOMOR, BLOK"/>
+      </div>
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">RT</label>
+        <input type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="000"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">RW</label>
+        <input type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="000"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Nama Dusun</label>
+        <input type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="DUSUN"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Kelurahan / Desa</label>
+        <input type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="KELURAHAN / DESA"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Kecamatan</label>
+        <input type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="KECAMATAN"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Kabupaten <span class="text-crimson-heritage">*</span></label>
+        <input required type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="KABUPATEN / KOTA"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Kode Pos</label>
+        <input type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="KODE POS"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Tempat Tinggal</label>
+        <select class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Bersama orang tua</option><option>Wali</option><option>Kos</option>
+          <option>Asrama</option><option>Panti Asuhan</option><option>Lainnya</option>
+        </select>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Moda Transportasi</label>
+        <select class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Jalan kaki</option><option>Kendaraan pribadi</option>
+          <option>Kendaraan Umum / Angkot</option><option>Jemputan Sekolah</option>
+          <option>Kereta Api</option><option>Ojek</option>
+          <option>Andong / Bendi / Becak</option><option>Perahu / Rakit / Getek</option>
+          <option>Lainnya</option>
+        </select>
+      </div>
+
+    </div>
+  </fieldset>
+
+  <!-- ── 04 Kontak & Identitas ── -->
+  <fieldset id="fs4" class="reveal">
+    <legend class="w-full flex items-center gap-4 mb-10">
+      <span class="font-display-lg text-4xl text-crimson-heritage leading-none">04</span>
+      <span class="flex-1 h-px bg-ink-black/20"></span>
+      <span class="font-label-sm uppercase tracking-widest text-ink-black/50 text-xs">Kontak & Identitas</span>
+    </legend>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Nomor Handphone <span class="text-crimson-heritage">*</span></label>
+        <input required type="tel" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="08XX-XXXX-XXXX"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Nomor Telepon <span class="text-crimson-heritage">*</span></label>
+        <input required type="tel" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="0XX-XXXX-XXXX"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">E-mail Pribadi</label>
+        <input type="email" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="EMAIL@ANDA.COM"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Kewarganegaraan <span class="text-crimson-heritage">*</span></label>
+        <select required class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Warga Negara Indonesia (WNI)</option>
+          <option>Warga Negara Asing (WNA)</option>
+        </select>
+      </div>
+
+    </div>
+  </fieldset>
+
+  <!-- ── 05 Data Orang Tua ── -->
+  <fieldset id="fs5" class="reveal">
+    <legend class="w-full flex items-center gap-4 mb-10">
+      <span class="font-display-lg text-4xl text-crimson-heritage leading-none">05</span>
+      <span class="flex-1 h-px bg-ink-black/20"></span>
+      <span class="font-label-sm uppercase tracking-widest text-ink-black/50 text-xs">Data Orang Tua & Wali</span>
+    </legend>
+
+    <!-- Ayah -->
+    <p class="font-label-sm uppercase tracking-widest text-ink-black/40 text-[10px] mb-6 flex items-center gap-3"><span class="w-8 h-px bg-ink-black/20 inline-block"></span>Ayah</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 mb-14">
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Nama Ayah <span class="text-crimson-heritage">*</span></label>
+        <input required type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="NAMA LENGKAP AYAH"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Tahun Lahir Ayah <span class="text-crimson-heritage">*</span></label>
+        <input required type="number" min="1940" max="2005" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="TAHUN"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Pendidikan Ayah</label>
+        <select class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Tidak sekolah</option><option>Putus SD</option><option>SD Sederajat</option>
+          <option>SMP Sederajat</option><option>SMA Sederajat</option>
+          <option>D1</option><option>D2</option><option>D3</option><option>D4/S1</option><option>S2</option><option>S3</option>
+        </select>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Pekerjaan Ayah <span class="text-crimson-heritage">*</span></label>
+        <select required class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Tidak bekerja</option><option>Nelayan</option><option>Petani</option><option>Peternak</option>
+          <option>PNS/TNI/POLRI</option><option>Karyawan Swasta</option><option>Pedagang Kecil</option>
+          <option>Pedagang Besar</option><option>Wiraswasta</option><option>Wirausaha</option>
+          <option>Buruh</option><option>Pensiunan</option><option>Lain-lain</option>
+        </select>
+      </div>
+      <div class="form-input-wrap md:col-span-2">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Penghasilan Bulanan Ayah <span class="text-crimson-heritage">*</span></label>
+        <select required class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Tidak Berpenghasilan</option><option>Kurang dari Rp. 500.000</option>
+          <option>Rp. 500.000 – Rp. 999.999</option><option>Rp. 1.000.000 – Rp. 1.999.999</option>
+          <option>Rp. 2.000.000 – Rp. 4.999.999</option><option>Rp. 5.000.000 – Rp. 20.000.000</option>
+          <option>Lebih dari Rp. 20.000.000</option><option>Lainnya</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Ibu -->
+    <p class="font-label-sm uppercase tracking-widest text-ink-black/40 text-[10px] mb-6 flex items-center gap-3"><span class="w-8 h-px bg-ink-black/20 inline-block"></span>Ibu</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 mb-14">
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Nama Ibu <span class="text-crimson-heritage">*</span></label>
+        <input required type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="NAMA LENGKAP IBU"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Tahun Lahir Ibu <span class="text-crimson-heritage">*</span></label>
+        <input required type="number" min="1940" max="2005" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="TAHUN"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Pendidikan Ibu</label>
+        <select class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Tidak sekolah</option><option>Putus SD</option><option>SD Sederajat</option>
+          <option>SMP Sederajat</option><option>SMA Sederajat</option>
+          <option>D1</option><option>D2</option><option>D3</option><option>D4/S1</option><option>S2</option><option>S3</option>
+        </select>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Pekerjaan Ibu</label>
+        <select class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Tidak bekerja</option><option>Nelayan</option><option>Petani</option><option>Peternak</option>
+          <option>PNS/TNI/POLRI</option><option>Karyawan Swasta</option><option>Pedagang Kecil</option>
+          <option>Pedagang Besar</option><option>Wiraswasta</option><option>Wirausaha</option>
+          <option>Buruh</option><option>Pensiunan</option><option>Lain-lain</option>
+        </select>
+      </div>
+      <div class="form-input-wrap md:col-span-2">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Penghasilan Bulanan Ibu</label>
+        <select class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Tidak Berpenghasilan</option><option>Kurang dari Rp. 500.000</option>
+          <option>Rp. 500.000 – Rp. 999.999</option><option>Rp. 1.000.000 – Rp. 1.999.999</option>
+          <option>Rp. 2.000.000 – Rp. 4.999.999</option><option>Rp. 5.000.000 – Rp. 20.000.000</option>
+          <option>Lebih dari Rp. 20.000.000</option><option>Lainnya</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Wali -->
+    <p class="font-label-sm uppercase tracking-widest text-ink-black/40 text-[10px] mb-6 flex items-center gap-3"><span class="w-8 h-px bg-ink-black/20 inline-block"></span>Wali (jika ada)</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Nama Wali</label>
+        <input type="text" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="NAMA LENGKAP WALI"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Tahun Lahir Wali</label>
+        <input type="number" min="1940" max="2005" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="TAHUN"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Pendidikan Wali</label>
+        <select class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Tidak sekolah</option><option>Putus SD</option><option>SD Sederajat</option>
+          <option>SMP Sederajat</option><option>SMA Sederajat</option>
+          <option>D1</option><option>D2</option><option>D3</option><option>D4/S1</option><option>S2</option><option>S3</option>
+        </select>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Pekerjaan Wali</label>
+        <select class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 font-body-md text-base outline-none appearance-none cursor-pointer text-ink-black">
+          <option value="" disabled selected>Pilih</option>
+          <option>Tidak bekerja</option><option>Nelayan</option><option>Petani</option><option>Peternak</option>
+          <option>PNS/TNI/POLRI</option><option>Karyawan Swasta</option><option>Pedagang Kecil</option>
+          <option>Pedagang Besar</option><option>Wiraswasta</option><option>Wirausaha</option>
+          <option>Buruh</option><option>Pensiunan</option><option>Lain-lain</option>
+        </select>
+      </div>
+    </div>
+  </fieldset>
+
+  <!-- ── 06 Data Fisik ── -->
+  <fieldset id="fs6" class="reveal">
+    <legend class="w-full flex items-center gap-4 mb-10">
+      <span class="font-display-lg text-4xl text-crimson-heritage leading-none">06</span>
+      <span class="flex-1 h-px bg-ink-black/20"></span>
+      <span class="font-label-sm uppercase tracking-widest text-ink-black/50 text-xs">Data Fisik & Lainnya</span>
+    </legend>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-10">
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Tinggi Badan (cm)</label>
+        <input type="number" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="cm"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Berat Badan (kg)</label>
+        <input type="number" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="kg"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Jarak ke Sekolah (km)</label>
+        <input type="number" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="km"/>
+      </div>
+      <div class="form-input-wrap">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Waktu Tempuh (menit)</label>
+        <input type="number" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="menit"/>
+      </div>
+      <div class="form-input-wrap md:col-span-2">
+        <label class="font-label-sm uppercase text-ink-black/50 block mb-2 text-xs tracking-widest">Jumlah Saudara Kandung</label>
+        <input type="number" min="0" class="w-full bg-transparent border-0 border-b border-ink-black/30 py-3 px-0 focus:ring-0 placeholder:text-ink-black/20 font-body-md text-base outline-none" placeholder="0"/>
+      </div>
+    </div>
+  </fieldset>
+
+  <!-- ── 07 Pernyataan ── -->
+  <fieldset id="fs7" class="reveal">
+    <legend class="w-full flex items-center gap-4 mb-10">
+      <span class="font-display-lg text-4xl text-crimson-heritage leading-none">07</span>
+      <span class="flex-1 h-px bg-ink-black/20"></span>
+      <span class="font-label-sm uppercase tracking-widest text-ink-black/50 text-xs">Pernyataan & Keamanan</span>
+    </legend>
+
+    <div class="border border-ink-black/20 p-8 mb-10" style="border-left:4px solid #A50000">
+      <p class="font-body-md text-ink-black/70 leading-relaxed">Saya yang bertandatangan di bawah ini menyatakan bahwa data yang tertera di atas adalah <strong class="text-ink-black">yang sebenarnya</strong> dan dapat dipertanggungjawabkan. Apabila dikemudian hari ditemukan ketidaksesuaian data, saya bersedia menerima konsekuensi yang berlaku.</p>
+    </div>
+
+    <label class="flex items-start gap-4 cursor-pointer group">
+      <input required type="checkbox" class="mt-1 w-5 h-5 border-2 border-ink-black/30 rounded-none accent-crimson-heritage cursor-pointer flex-shrink-0"/>
+      <span class="font-label-sm text-ink-black/60 text-sm leading-relaxed group-hover:text-ink-black transition-colors">Saya menyetujui pernyataan di atas dan menyatakan bahwa semua data yang saya isi adalah benar. <span class="text-crimson-heritage">*</span></span>
+    </label>
+  </fieldset>
+
+  <!-- ── SUBMIT ── -->
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 pt-8 border-t border-ink-black/15">
+    <div>
+      <p class="font-label-sm text-ink-black/40 text-xs uppercase tracking-widest mb-1">Kolom bertanda <span class="text-crimson-heritage">*</span> wajib diisi</p>
+      <p class="font-label-sm text-ink-black/30 text-xs">Pastikan semua data sudah benar sebelum mengirim.</p>
+    </div>
+    <button type="submit" class="kirim-btn font-display-lg text-3xl text-crimson-heritage flex items-center gap-4 hover:gap-8 transition-all duration-500 px-2 py-1">
+      <span style="position:relative;z-index:1">KIRIM</span> <span class="material-symbols-outlined text-3xl" style="position:relative;z-index:1">arrow_forward</span>
+    </button>
+  </div>
+
+</form>
+</main>
+
+<!-- ═══════════════════ MINI FOOTER ═══════════════════ -->
+<footer class="bg-electric-midnight text-canvas-off-white py-10 px-6 md:px-margin-edge flex flex-col md:flex-row justify-between items-center gap-4 border-t-4 border-crimson-heritage">
+  <div class="flex items-center gap-4">
+    <span class="font-display-lg italic text-3xl text-crimson-heritage">IGS</span>
+    <div>
+      <p class="font-label-sm text-xs uppercase tracking-widest text-white/50">Ignatius Global School</p>
+      <p class="font-label-sm text-xs text-white/30 mt-0.5">Formulir PPDB Online</p>
+    </div>
+  </div>
+  <a href="index.html" class="font-label-sm text-xs uppercase tracking-widest text-white/40 hover:text-white transition-colors flex items-center gap-2">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Kembali ke Beranda
+  </a>
+  <p class="font-label-sm text-xs text-white/20 uppercase tracking-widest">© 2025 IGS — Crafted by Wilbert · Claude AI</p>
+</footer>
+
+<!-- Back to top -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 right-6 z-50 w-12 h-12 bg-crimson-heritage flex items-center justify-center text-white shadow-lg hover:bg-ink-black transition-colors duration-300">
+  <span class="material-symbols-outlined text-xl">arrow_upward</span>
+</button>
+
+<script>
+/* ══════════════════════════════════════════════
+   VALIDASI FORM
+══════════════════════════════════════════════ */
+function getWrap(el) {
+  return el.closest('.form-input-wrap');
+}
+
+function setValid(el) {
+  const w = getWrap(el); if (!w) return;
+  w.classList.remove('field-error');
+  w.classList.add('field-valid');
+  if (!w.querySelector('.valid-tick')) {
+    const tick = document.createElement('span');
+    tick.className = 'material-symbols-outlined valid-tick';
+    tick.textContent = 'check_circle';
+    w.appendChild(tick);
+  }
+}
+
+function setError(el, msg) {
+  const w = getWrap(el); if (!w) return;
+  w.classList.remove('field-valid');
+  w.classList.add('field-error');
+  let errEl = w.querySelector('.err-msg');
+  if (!errEl) { errEl = document.createElement('span'); errEl.className = 'err-msg'; w.appendChild(errEl); }
+  errEl.textContent = msg || 'Field ini wajib diisi';
+}
+
+function clearError(el) {
+  const w = getWrap(el); if (!w) return;
+  w.classList.remove('field-error', 'field-valid');
+}
+
+function validateField(el) {
+  const val = el.value.trim();
+  const type = el.type;
+
+  // Jika tidak required dan kosong, bersihkan error saja
+  if (!el.required && val === '') { clearError(el); return true; }
+
+  if (el.required && val === '') {
+    setError(el, 'Field ini wajib diisi');
+    return false;
+  }
+
+  if (type === 'email' && val) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      setError(el, 'Format email tidak valid');
+      return false;
+    }
+  }
+
+  if (type === 'tel' && val) {
+    if (!/^[0-9\-\+\s]{8,15}$/.test(val)) {
+      setError(el, 'Nomor telepon tidak valid');
+      return false;
+    }
+  }
+
+  if (type === 'number' && val) {
+    const num = Number(val);
+    if (el.min && num < Number(el.min)) { setError(el, `Minimal ${el.min}`); return false; }
+    if (el.max && num > Number(el.max)) { setError(el, `Maksimal ${el.max}`); return false; }
+  }
+
+  if (type === 'date' && val) {
+    const d = new Date(val);
+    const now = new Date();
+    if (d >= now) { setError(el, 'Tanggal lahir tidak valid'); return false; }
+  }
+
+  if (el.tagName === 'SELECT' && (val === '' || val === null)) {
+    setError(el, 'Silakan pilih salah satu');
+    return false;
+  }
+
+  setValid(el);
+  return true;
+}
+
+// Pasang event listener realtime ke semua field
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('ppdb-form');
+  const fields = form.querySelectorAll('input, select, textarea');
+  fields.forEach(el => {
+    el.addEventListener('blur', () => validateField(el));
+    el.addEventListener('input', () => {
+      if (getWrap(el) && getWrap(el).classList.contains('field-error')) validateField(el);
+    });
+    el.addEventListener('change', () => validateField(el));
+  });
+});
+
+/* ══════════════════════════════════════════════
+   RANDOM STATUS
+══════════════════════════════════════════════ */
+function getRandomStatus() {
+  const statuses = ['Lulus', 'Menunggu', 'Tidak Lulus'];
+  // Bobot: Lulus 40%, Menunggu 35%, Tidak Lulus 25%
+  const weights = [40, 35, 25];
+  const total = weights.reduce((a, b) => a + b, 0);
+  let rand = Math.floor(Math.random() * total);
+  for (let i = 0; i < statuses.length; i++) {
+    rand -= weights[i];
+    if (rand < 0) return statuses[i];
+  }
+  return 'Menunggu';
+}
+
+/* ══════════════════════════════════════════════
+   SUBMIT FORM
+══════════════════════════════════════════════ */
+function savePPDB(e) {
+  e.preventDefault();
+  const form = document.getElementById('ppdb-form');
+
+  // Validasi semua field
+  const fields = form.querySelectorAll('input, select, textarea');
+  let valid = true;
+  fields.forEach(el => {
+    if (!validateField(el)) valid = false;
+  });
+  if (!valid) {
+    // Scroll ke field error pertama
+    const firstErr = form.querySelector('.field-error');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const fd = new FormData(form);
+  const id = 'IGS-' + Date.now().toString().slice(-6);
+  const tanggalDaftar = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+  const status = getRandomStatus();
+
+  const siswa = {
+    id,
+    nama:              fd.get('nama') || '-',
+    jenis_kelamin:     fd.get('jenis_kelamin') || '-',
+    nisn:              fd.get('nisn') || '-',
+    tempat_lahir:      fd.get('tempat_lahir') || '-',
+    tanggal_lahir:     fd.get('tanggal_lahir') || '-',
+    jenis_pendaftaran: fd.get('jenis_pendaftaran') || '-',
+    jalur:             fd.get('jalur') || '-',
+    pilihan:           fd.get('pilihan') || '-',
+    sekolah_asal:      fd.get('sekolah_asal') || '-',
+    tanggal_daftar:    tanggalDaftar,
+    status,
+  };
+
+  try {
+    const existing = JSON.parse(localStorage.getItem('igs_ppdb_data') || '[]');
+    existing.push(siswa);
+    localStorage.setItem('igs_ppdb_data', JSON.stringify(existing));
+  } catch (err) {
+    console.error('Gagal menyimpan data:', err);
+  }
+
+  // Reset & scroll up
+  form.reset();
+  form.querySelectorAll('.form-input-wrap').forEach(w => w.classList.remove('field-error', 'field-valid'));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Tampilkan modal hasil
+  showResultModal(siswa);
+}
+
+/* ══════════════════════════════════════════════
+   MODAL HASIL PENDAFTARAN
+══════════════════════════════════════════════ */
+function showResultModal(siswa) {
+  const modal = document.getElementById('result-modal');
+  if (!modal) return;
+
+  const statusConfig = {
+    'Lulus':       { icon: 'check_circle', cls: 'status-lulus',    badgeCls: 'badge-lulus',    iconColor: '#15803d', label: 'Selamat! Anda Dinyatakan' },
+    'Tidak Lulus': { icon: 'cancel',       cls: 'status-tidak',    badgeCls: 'badge-tidak',    iconColor: '#b91c1c', label: 'Mohon Maaf, Anda' },
+    'Menunggu':    { icon: 'hourglass_empty', cls: 'status-menunggu', badgeCls: 'badge-menunggu', iconColor: '#a16207', label: 'Pendaftaran Anda Sedang' },
+  };
+  const cfg = statusConfig[siswa.status] || statusConfig['Menunggu'];
+
+  document.getElementById('modal-status-icon-wrap').className   = `status-icon ${cfg.cls}`;
+  document.getElementById('modal-status-icon').textContent      = cfg.icon;
+  document.getElementById('modal-status-icon').style.color      = cfg.iconColor;
+  document.getElementById('modal-status-label').textContent     = cfg.label;
+  document.getElementById('modal-status-badge').textContent     = siswa.status;
+  document.getElementById('modal-status-badge').className       = `font-label-sm text-sm px-4 py-1.5 rounded-full inline-block font-semibold ${cfg.badgeCls}`;
+  document.getElementById('modal-reg-id').textContent           = siswa.id;
+  document.getElementById('modal-nama').textContent             = siswa.nama;
+  document.getElementById('modal-pilihan').textContent          = siswa.pilihan;
+  document.getElementById('modal-tanggal').textContent          = siswa.tanggal_daftar;
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeResultModal() {
+  const modal = document.getElementById('result-modal');
+  if (modal) modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Tutup modal klik backdrop
+document.addEventListener('DOMContentLoaded', function () {
+  const modal = document.getElementById('result-modal');
+  if (modal) {
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) closeResultModal();
+    });
+  }
+});
+</script>
+
+<!-- ── Result Modal ── -->
+<div id="result-modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+  <div id="modal-card">
+    <!-- Close -->
+    <button onclick="closeResultModal()" aria-label="Tutup"
+      style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:#0D0D0D;opacity:.4;font-size:20px;line-height:1;padding:4px">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+
+    <!-- Status Icon -->
+    <div id="modal-status-icon-wrap" class="status-icon status-menunggu">
+      <span id="modal-status-icon" class="material-symbols-outlined"
+        style="font-size:36px;font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 40">hourglass_empty</span>
+    </div>
+
+    <!-- Heading -->
+    <p id="modal-status-label" class="font-label-sm uppercase tracking-widest text-ink-black/40 text-xs text-center mb-2">Status Pendaftaran</p>
+    <div class="text-center mb-6">
+      <span id="modal-status-badge" class="font-label-sm text-sm px-4 py-1.5 rounded-full inline-block font-semibold badge-menunggu">Menunggu</span>
+    </div>
+
+    <!-- Detail -->
+    <div class="border-t border-b border-ink-black/10 py-5 mb-6 space-y-3">
+      <div class="flex justify-between items-start gap-4">
+        <span class="font-label-sm uppercase text-ink-black/40 text-xs tracking-widest whitespace-nowrap">No. Pendaftaran</span>
+        <span id="modal-reg-id" class="font-label-sm text-xs text-crimson-heritage tracking-wider font-bold text-right">—</span>
+      </div>
+      <div class="flex justify-between items-start gap-4">
+        <span class="font-label-sm uppercase text-ink-black/40 text-xs tracking-widest whitespace-nowrap">Nama</span>
+        <span id="modal-nama" class="font-body-md text-sm text-ink-black text-right">—</span>
+      </div>
+      <div class="flex justify-between items-start gap-4">
+        <span class="font-label-sm uppercase text-ink-black/40 text-xs tracking-widest whitespace-nowrap">Pilihan</span>
+        <span id="modal-pilihan" class="font-body-md text-sm text-ink-black text-right">—</span>
+      </div>
+      <div class="flex justify-between items-start gap-4">
+        <span class="font-label-sm uppercase text-ink-black/40 text-xs tracking-widest whitespace-nowrap">Tanggal Daftar</span>
+        <span id="modal-tanggal" class="font-body-md text-sm text-ink-black text-right">—</span>
+      </div>
+    </div>
+
+    <p class="font-body-md text-xs text-ink-black/40 text-center mb-6 leading-relaxed">
+      Simpan nomor pendaftaran Anda untuk pengecekan status kelulusan lebih lanjut.
+    </p>
+
+    <div class="flex gap-3">
+      <button onclick="closeResultModal()"
+        class="flex-1 border border-ink-black/20 py-3 font-label-sm uppercase tracking-widest text-xs text-ink-black/60 hover:border-ink-black hover:text-ink-black transition-colors">
+        Tutup
+      </button>
+      <a href="cek-lulus.html"
+        class="flex-1 bg-crimson-heritage text-white py-3 font-label-sm uppercase tracking-widest text-xs text-center hover:bg-ink-black transition-colors duration-300 flex items-center justify-center gap-2">
+        Cek Status <span class="material-symbols-outlined text-sm">arrow_forward</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+const dot  = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+
+/* Navbar scroll */
+const header = document.getElementById('header');
+window.addEventListener('scroll',()=>{
+  header.classList.toggle('scrolled', window.scrollY > 80);
+  document.getElementById('back-top').classList.toggle('show', window.scrollY > 400);
+});
+
+/* Scroll reveal */
+function initReveal(){
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'),i*80); obs.unobserve(e.target); }
+    });
+  },{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+window.addEventListener('load', initReveal);
+if(document.readyState==='complete') initReveal();
+
+/* Step progress bar */
+const sections = ['fs1','fs2','fs3','fs4','fs5','fs6','fs7'];
+const dots = [1,2,3,4,5,6,7].map(i=>document.getElementById('sd'+i));
+const secObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const idx = sections.indexOf(e.target.id);
+      dots.forEach((d,i)=>{ if(d) d.classList.toggle('active', i<=idx); });
+    }
+  });
+},{threshold:.3});
+sections.forEach(id=>{ const el=document.getElementById(id); if(el) secObs.observe(el); });
+
+/* Mobile nav */
+const mNav = document.getElementById('mobile-nav');
+const bd   = document.getElementById('mobile-backdrop');
+new MutationObserver(()=>{
+  const open = mNav.classList.contains('open');
+  bd.style.opacity = open?'1':'0';
+  bd.style.pointerEvents = open?'auto':'none';
+}).observe(mNav,{attributes:true,attributeFilter:['class']});
+</script>
+</body>
+</html>

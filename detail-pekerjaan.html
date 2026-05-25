@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detail Pekerjaan — Ignatius Global School</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="icon" type="image/webp" href="logo_igs.webp"/>
+<link rel="shortcut icon" type="image/webp" href="logo_igs.webp"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          "ink-black":      "#0D0D0D",
+          "canvas-off-white": "#F5F0EB",
+          "crimson-heritage": "#A50000",
+          "signal-gold":    "#C9922A",
+        },
+        fontFamily: {
+          "display-lg": ["EB Garamond"],
+          "body-md":    ["DM Sans"],
+          "label-sm":   ["DM Sans"],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:#F5F0EB; }
+  ::-webkit-scrollbar-thumb { background:#0D0D0D; }
+
+  body { background:#F5F0EB; color:#0D0D0D; font-family:'DM Sans',sans-serif; }
+
+  /* Form inputs */
+  .form-field {
+    width:100%; background:#fff; border:1px solid rgba(165,0,0,0.2);
+    padding:14px 16px; font-family:'DM Sans',sans-serif; font-size:14px;
+    color:#0D0D0D; outline:none; transition:border-color .25s;
+  }
+  .form-field:focus { border-color:#A50000; }
+  .form-field::placeholder { color:rgba(13,13,13,0.4); }
+
+  label { display:block; font-family:'DM Sans',sans-serif; font-size:11px;
+    font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+    color:#A50000; margin-bottom:8px; }
+
+  /* File upload area */
+  .upload-area {
+    border:2px dashed rgba(165,0,0,0.3); background:#fff;
+    padding:32px; text-align:center; cursor:pointer;
+    transition:all .25s;
+  }
+  .upload-area:hover { border-color:#A50000; background:rgba(165,0,0,0.02); }
+
+  /* Submit button */
+  .btn-submit {
+    background:#A50000; color:#fff; width:100%; padding:16px;
+    font-family:'DM Sans',sans-serif; font-size:12px; font-weight:700;
+    letter-spacing:0.14em; text-transform:uppercase; border:none;
+    cursor:pointer; transition:background .25s;
+  }
+  .btn-submit:hover { background:#0D0D0D; }
+
+  /* Back link */
+  .back-link {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'DM Sans',sans-serif; font-size:12px; font-weight:600;
+    letter-spacing:0.1em; text-transform:uppercase;
+    color:#A50000; text-decoration:none; transition:gap .25s;
+  }
+  .back-link:hover { gap:14px; }
+
+  /* Section divider */
+  .section-rule { height:1px; background:rgba(165,0,0,0.15); margin:40px 0; }
+
+  /* Success toast */
+  #toast {
+    position:fixed; bottom:32px; right:32px; z-index:9999;
+    background:#0D0D0D; color:#fff; padding:16px 24px;
+    font-family:'DM Sans',sans-serif; font-size:13px;
+    display:flex; align-items:center; gap:12px;
+    transform:translateY(80px); opacity:0;
+    transition:all .4s cubic-bezier(.16,1,.3,1);
+    max-width:360px;
+  }
+  #toast.show { transform:translateY(0); opacity:1; }
+
+  /* Requirement chip */
+  .req-chip {
+    display:inline-flex; align-items:center; gap:6px;
+    background:#fff; border:1px solid rgba(165,0,0,0.18);
+    padding:6px 12px; font-size:12px; font-family:'DM Sans',sans-serif;
+    color:#0D0D0D; margin:4px;
+  }
+  .req-chip .material-symbols-outlined { font-size:14px; color:#A50000; }
+
+  /* Sticky form card */
+  @media (min-width:1024px) {
+    .sticky-form { position:sticky; top:100px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Navbar strip ── -->
+<header style="background:rgba(245,240,235,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(165,0,0,0.12);position:sticky;top:0;z-index:50">
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between">
+    <a href="index.html" style="display:flex;align-items:center;gap:12px;text-decoration:none">
+      <img src="logo_igs.webp" alt="Ignatius Global School" style="height:44px;width:auto;object-fit:contain;display:block">
+    </a>
+    <a href="index.html#karier" class="back-link">
+      <span class="material-symbols-outlined" style="font-size:16px">arrow_back</span>
+      Kembali ke Karier
+    </a>
+  </div>
+</header>
+
+<main style="max-width:1200px;margin:0 auto;padding:64px 32px">
+
+  <!-- ── Breadcrumb ── -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:48px;font-size:12px;color:rgba(13,13,13,0.45);font-family:'DM Sans',sans-serif;letter-spacing:0.05em">
+    <a href="index.html" style="color:#A50000;text-decoration:none;font-weight:600">Beranda</a>
+    <span class="material-symbols-outlined" style="font-size:14px">chevron_right</span>
+    <a href="index.html#karier" style="color:#A50000;text-decoration:none;font-weight:600">Karier</a>
+    <span class="material-symbols-outlined" style="font-size:14px">chevron_right</span>
+    <span id="bc-title">Detail Pekerjaan</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr;gap:48px" class="lg:grid-cols-[1fr_420px]">
+
+    <!-- ── LEFT: Job Detail ── -->
+    <div>
+
+      <!-- Header -->
+      <div style="margin-bottom:40px">
+        <span id="job-badge" style="display:inline-block;background:#A50000;color:#fff;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:4px 14px;margin-bottom:20px">GURU</span>
+        <h1 id="job-title" style="font-family:'EB Garamond',serif;font-size:clamp(36px,5vw,64px);line-height:1.1;font-weight:400;color:#0D0D0D;margin-bottom:24px">Guru Matematika</h1>
+
+        <!-- Meta strip -->
+        <div style="display:flex;flex-wrap:wrap;gap:20px;padding:20px 0;border-top:1px solid rgba(165,0,0,0.15);border-bottom:1px solid rgba(165,0,0,0.15)">
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(13,13,13,0.6)">
+            <span class="material-symbols-outlined" style="font-size:16px;color:#A50000">location_on</span>
+            Pekanbaru, Riau
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(13,13,13,0.6)">
+            <span class="material-symbols-outlined" style="font-size:16px;color:#A50000">schedule</span>
+            Full-time
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(13,13,13,0.6)">
+            <span class="material-symbols-outlined" style="font-size:16px;color:#A50000">event</span>
+            <span id="job-deadline" style="color:#A50000;font-weight:600">Deadline: 31 Jan 2025</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deskripsi -->
+      <div style="margin-bottom:40px">
+        <h2 style="font-family:'EB Garamond',serif;font-size:28px;font-weight:500;margin-bottom:16px;color:#0D0D0D">Deskripsi Pekerjaan</h2>
+        <p id="job-desc" style="font-size:15px;line-height:1.8;color:rgba(13,13,13,0.75)"></p>
+      </div>
+
+      <div class="section-rule"></div>
+
+      <!-- Tanggung Jawab -->
+      <div style="margin-bottom:40px">
+        <h2 style="font-family:'EB Garamond',serif;font-size:28px;font-weight:500;margin-bottom:20px;color:#0D0D0D">Tanggung Jawab</h2>
+        <ul id="job-responsibilities" style="list-style:none;padding:0;display:flex;flex-direction:column;gap:12px"></ul>
+      </div>
+
+      <div class="section-rule"></div>
+
+      <!-- Kualifikasi -->
+      <div style="margin-bottom:40px">
+        <h2 style="font-family:'EB Garamond',serif;font-size:28px;font-weight:500;margin-bottom:20px;color:#0D0D0D">Kualifikasi</h2>
+        <div id="job-qualifications" style="display:flex;flex-wrap:wrap;margin:-4px"></div>
+      </div>
+
+      <div class="section-rule"></div>
+
+      <!-- Benefit -->
+      <div>
+        <h2 style="font-family:'EB Garamond',serif;font-size:28px;font-weight:500;margin-bottom:20px;color:#0D0D0D">Yang Kami Tawarkan</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px" id="job-benefits"></div>
+      </div>
+
+    </div>
+
+    <!-- ── RIGHT: Form Registrasi ── -->
+    <div class="sticky-form">
+      <div style="background:#fff;border:1px solid rgba(165,0,0,0.15);padding:40px">
+
+        <div style="margin-bottom:32px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:32px;height:2px;background:#A50000"></div>
+            <span style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#A50000">Lamar Posisi Ini</span>
+          </div>
+          <h3 id="form-job-title" style="font-family:'EB Garamond',serif;font-size:24px;font-weight:500;color:#0D0D0D">Guru Matematika</h3>
+        </div>
+
+        <form id="apply-form" novalidate>
+
+          <div style="margin-bottom:20px">
+            <label for="nama">Nama Lengkap *</label>
+            <input class="form-field" type="text" id="nama" name="nama" placeholder="Nama sesuai KTP" required/>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <label for="email">Email *</label>
+            <input class="form-field" type="email" id="email" name="email" placeholder="email@anda.com" required/>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <label for="telepon">Nomor Telepon *</label>
+            <input class="form-field" type="tel" id="telepon" name="telepon" placeholder="08xxxxxxxxxx" required/>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <label for="pendidikan">Pendidikan Terakhir *</label>
+            <select class="form-field" id="pendidikan" name="pendidikan" required style="appearance:none;cursor:pointer">
+              <option value="" disabled selected>Pilih jenjang pendidikan</option>
+              <option value="D3">D3</option>
+              <option value="S1">S1</option>
+              <option value="S2">S2</option>
+              <option value="S3">S3</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <label for="pengalaman">Pengalaman Kerja</label>
+            <select class="form-field" id="pengalaman" name="pengalaman" style="appearance:none;cursor:pointer">
+              <option value="" disabled selected>Pilih pengalaman</option>
+              <option value="fresh">Fresh Graduate</option>
+              <option value="1-2">1–2 Tahun</option>
+              <option value="3-5">3–5 Tahun</option>
+              <option value="5+">Lebih dari 5 Tahun</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <label for="pesan">Motivasi / Cover Letter</label>
+            <textarea class="form-field" id="pesan" name="pesan" rows="4" placeholder="Ceritakan motivasi Anda bergabung dengan IGS..."></textarea>
+          </div>
+
+          <div style="margin-bottom:28px">
+            <label>Upload CV (PDF/DOC) *</label>
+            <div class="upload-area" id="upload-area" onclick="document.getElementById('cv-file').click()">
+              <span class="material-symbols-outlined" style="font-size:32px;color:#A50000;display:block;margin-bottom:8px">upload_file</span>
+              <p style="font-size:13px;color:rgba(13,13,13,0.5);margin:0">Klik untuk unggah CV</p>
+              <p style="font-size:11px;color:rgba(13,13,13,0.35);margin:4px 0 0">PDF atau DOC, maks. 5MB</p>
+              <p id="file-name" style="font-size:12px;color:#A50000;margin-top:8px;font-weight:600;display:none"></p>
+            </div>
+            <input type="file" id="cv-file" name="cv" accept=".pdf,.doc,.docx" style="display:none" onchange="handleFileChange(this)"/>
+          </div>
+
+          <!-- Hidden: posisi yang dilamar -->
+          <input type="hidden" id="posisi" name="posisi" value=""/>
+
+          <button type="submit" class="btn-submit">
+            Kirim Lamaran
+          </button>
+
+          <p style="font-size:11px;color:rgba(13,13,13,0.4);text-align:center;margin-top:16px;line-height:1.6">
+            Dengan mengirimkan lamaran, Anda menyetujui penggunaan data pribadi sesuai kebijakan privasi IGS.
+          </p>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Footer mini -->
+<footer style="background:#0D0D0D;color:rgba(255,255,255,0.4);text-align:center;padding:24px 32px;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;margin-top:80px">
+  © 2025 Ignatius Global School — Crafted by Wilbert · Claude AI
+</footer>
+
+<!-- Toast -->
+<div id="toast">
+  <span class="material-symbols-outlined" style="font-size:20px;color:#A50000;flex-shrink:0">check_circle</span>
+  <div>
+    <div style="font-weight:700;margin-bottom:2px">Lamaran Terkirim!</div>
+    <div style="font-size:12px;opacity:0.7">Tim HRD IGS akan menghubungi Anda segera.</div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════
+   Data Pekerjaan
+════════════════════════════════ */
+const JOBS = {
+  'guru-matematika': {
+    badge: 'GURU',
+    title: 'Guru Matematika',
+    deadline: 'Deadline: 31 Jan 2025',
+    desc: 'Kami mencari Guru Matematika berdedikasi untuk mengampu mata pelajaran Matematika tingkat SMA dengan kurikulum Cambridge. Kandidat ideal adalah individu yang mampu menciptakan pembelajaran yang inovatif, analitis, dan berpusat pada siswa, serta memiliki kemampuan komunikasi yang baik untuk mendampingi perkembangan akademik setiap peserta didik.',
+    responsibilities: [
+      'Menyusun dan melaksanakan Rencana Pelaksanaan Pembelajaran (RPP) berbasis kurikulum Cambridge',
+      'Membimbing siswa dalam memahami konsep Matematika secara kontekstual dan aplikatif',
+      'Merancang soal evaluasi dan menganalisis hasil belajar siswa secara berkala',
+      'Berpartisipasi aktif dalam program pengembangan profesional dan komunitas belajar sekolah',
+      'Membimbing siswa yang mengikuti olimpiade atau kompetisi Matematika tingkat regional dan nasional',
+    ],
+    qualifications: ['S1 Pendidikan Matematika', 'Akta IV / PPG', 'Min. 2 Tahun Pengalaman', 'Cambridge Curriculum', 'Komunikatif', 'Inovatif', 'NUPTK (diutamakan)'],
+    benefits: [
+      { icon: 'payments', label: 'Gaji Kompetitif', desc: 'Sesuai kualifikasi & pengalaman' },
+      { icon: 'health_and_safety', label: 'BPJS Kesehatan', desc: 'Jaminan kesehatan penuh' },
+      { icon: 'school', label: 'Pelatihan & Sertifikasi', desc: 'Pengembangan profesional rutin' },
+      { icon: 'calendar_month', label: 'Cuti Tahunan', desc: '14 hari kerja per tahun' },
+    ]
+  },
+  'guru-bahasa-inggris': {
+    badge: 'GURU',
+    title: 'Guru Bahasa Inggris',
+    deadline: 'Deadline: 31 Jan 2025',
+    desc: 'Kami membuka posisi Guru Bahasa Inggris untuk mengembangkan kemampuan literasi dan komunikasi aktif siswa dalam lingkungan akademis bertaraf internasional. Kandidat diharapkan mampu menciptakan suasana kelas yang dinamis dan mendorong kepercayaan diri siswa dalam berbahasa Inggris secara lisan maupun tulisan.',
+    responsibilities: [
+      'Mengajarkan Bahasa Inggris dengan pendekatan komunikatif untuk siswa SMA',
+      'Mengintegrasikan materi berbasis teks otentik, diskusi, dan presentasi dalam pembelajaran',
+      'Mempersiapkan siswa menghadapi ujian internasional seperti IELTS, TOEFL, atau Cambridge IGCSE',
+      'Merancang proyek literasi dan kegiatan ekstrakurikuler berbasis bahasa',
+      'Berkolaborasi dengan guru mata pelajaran lain dalam program lintas disiplin',
+    ],
+    qualifications: ['S1 Pendidikan Bahasa Inggris', 'Akta IV / PPG', 'TOEFL ≥ 550 / IELTS ≥ 7.0', 'Min. 1 Tahun Pengalaman', 'Native-like Proficiency', 'Cambridge IGCSE (plus)'],
+    benefits: [
+      { icon: 'payments', label: 'Gaji Kompetitif', desc: 'Sesuai kualifikasi & pengalaman' },
+      { icon: 'health_and_safety', label: 'BPJS Kesehatan', desc: 'Jaminan kesehatan penuh' },
+      { icon: 'flight', label: 'Program Pertukaran', desc: 'Kesempatan studi ke luar negeri' },
+      { icon: 'calendar_month', label: 'Cuti Tahunan', desc: '14 hari kerja per tahun' },
+    ]
+  },
+  'staff-administrasi': {
+    badge: 'ADMINISTRASI',
+    title: 'Staff Administrasi',
+    deadline: 'Deadline: 31 Jan 2025',
+    desc: 'Posisi Staff Administrasi dibutuhkan untuk mengelola data akademik dan operasional harian IGS. Kandidat ideal adalah individu yang teliti, terorganisir, dan mampu bekerja di bawah tekanan dengan standar keakuratan tinggi untuk memastikan seluruh proses administrasi berjalan lancar.',
+    responsibilities: [
+      'Mengelola arsip dokumen akademik, administratif, dan surat-menyurat sekolah',
+      'Memproses data siswa, guru, dan karyawan dalam sistem informasi manajemen sekolah',
+      'Mengkoordinasikan kebutuhan logistik kegiatan sekolah harian dan insidental',
+      'Menyiapkan laporan bulanan dan tahunan untuk kebutuhan akreditasi dan manajemen',
+      'Melayani keperluan administrasi orang tua/wali murid dengan ramah dan profesional',
+    ],
+    qualifications: ['D3/S1 Administrasi / Manajemen', 'Ms. Office Mahir', 'Mengetik Cepat', 'Teliti & Rapi', 'Komunikatif', 'Min. 1 Tahun Pengalaman'],
+    benefits: [
+      { icon: 'payments', label: 'Gaji Kompetitif', desc: 'Sesuai kualifikasi & pengalaman' },
+      { icon: 'health_and_safety', label: 'BPJS Kesehatan & TK', desc: 'Jaminan sosial lengkap' },
+      { icon: 'schedule', label: 'Jam Kerja Teratur', desc: 'Senin–Jumat, 07.00–16.00' },
+      { icon: 'calendar_month', label: 'Cuti Tahunan', desc: '12 hari kerja per tahun' },
+    ]
+  },
+  'petugas-perpustakaan': {
+    badge: 'STAF',
+    title: 'Petugas Perpustakaan',
+    deadline: 'Deadline: 31 Jan 2025',
+    desc: 'Kami membuka posisi Petugas Perpustakaan untuk mengelola koleksi pustaka digital dan fisik IGS, serta mendukung budaya literasi seluruh warga sekolah. Kandidat yang tepat adalah individu yang memiliki kecintaan terhadap buku, teknologi informasi perpustakaan, dan senang membantu siswa mengeksplorasi pengetahuan.',
+    responsibilities: [
+      'Mengelola katalog buku fisik dan digital menggunakan sistem manajemen perpustakaan',
+      'Melayani peminjaman dan pengembalian buku serta sumber belajar lainnya',
+      'Mengembangkan koleksi pustaka sesuai kebutuhan kurikulum dan minat siswa',
+      'Menyelenggarakan program literasi, bedah buku, dan kegiatan pustaka kreatif',
+      'Memelihara kondisi fisik koleksi dan menjaga kebersihan serta kerapian ruangan',
+    ],
+    qualifications: ['D3/S1 Ilmu Perpustakaan', 'Sistem Perpustakaan Digital', 'Cinta Literasi', 'Teliti & Terorganisir', 'Ramah & Sabar', 'Min. 1 Tahun Pengalaman'],
+    benefits: [
+      { icon: 'payments', label: 'Gaji Kompetitif', desc: 'Sesuai kualifikasi & pengalaman' },
+      { icon: 'health_and_safety', label: 'BPJS Kesehatan', desc: 'Jaminan kesehatan penuh' },
+      { icon: 'menu_book', label: 'Akses Koleksi Penuh', desc: 'Akses gratis semua koleksi' },
+      { icon: 'calendar_month', label: 'Cuti Tahunan', desc: '12 hari kerja per tahun' },
+    ]
+  },
+  'guru-seni-budaya': {
+    badge: 'GURU',
+    title: 'Guru Seni & Budaya',
+    deadline: 'Deadline: 31 Jan 2025',
+    desc: 'Posisi Guru Seni & Budaya dibuka untuk membimbing ekspresi kreatif siswa melalui seni rupa, musik, dan apresiasi budaya nusantara serta dunia. Kami mencari sosok yang inspiratif, kreatif, dan mampu mengintegrasikan nilai-nilai budaya ke dalam pengalaman belajar yang bermakna dan menyenangkan bagi siswa.',
+    responsibilities: [
+      'Mengajarkan Seni Rupa, Seni Musik, dan Apresiasi Budaya sesuai kurikulum nasional dan lokal',
+      'Membimbing siswa dalam berkarya seni yang autentik dan bernilai estetika tinggi',
+      'Menyelenggarakan pameran karya seni dan pertunjukan budaya tahunan sekolah',
+      'Mengintegrasikan teknologi digital kreatif dalam proses pembelajaran seni',
+      'Mendampingi siswa yang mengikuti kompetisi seni tingkat lokal, regional, dan nasional',
+    ],
+    qualifications: ['S1 Pendidikan Seni Rupa/Musik', 'Akta IV / PPG', 'Portofolio Karya', 'Kreatif & Inovatif', 'Min. 1 Tahun Pengalaman', 'Teknologi Desain Digital (plus)'],
+    benefits: [
+      { icon: 'payments', label: 'Gaji Kompetitif', desc: 'Sesuai kualifikasi & pengalaman' },
+      { icon: 'health_and_safety', label: 'BPJS Kesehatan', desc: 'Jaminan kesehatan penuh' },
+      { icon: 'palette', label: 'Dana Proyek Seni', desc: 'Anggaran ekspresi kreatif' },
+      { icon: 'calendar_month', label: 'Cuti Tahunan', desc: '14 hari kerja per tahun' },
+    ]
+  }
+};
+
+/* ════════════════════════════════
+   Render halaman dari URL param
+════════════════════════════════ */
+(function init() {
+  const params  = new URLSearchParams(window.location.search);
+  const jobKey  = params.get('job') || 'guru-matematika';
+  const job     = JOBS[jobKey] || JOBS['guru-matematika'];
+
+  // Page title
+  document.title = job.title + ' — Ignatius Global School';
+
+  // Breadcrumb
+  document.getElementById('bc-title').textContent = job.title;
+
+  // Badge & title
+  document.getElementById('job-badge').textContent  = job.badge;
+  document.getElementById('job-title').textContent  = job.title;
+  document.getElementById('job-deadline').textContent = job.deadline;
+  document.getElementById('form-job-title').textContent = job.title;
+  document.getElementById('posisi').value = job.title;
+
+  // Description
+  document.getElementById('job-desc').textContent = job.desc;
+
+  // Responsibilities
+  const ul = document.getElementById('job-responsibilities');
+  job.responsibilities.forEach(r => {
+    ul.innerHTML += `
+      <li style="display:flex;align-items:flex-start;gap:12px">
+        <span class="material-symbols-outlined" style="font-size:16px;color:#A50000;margin-top:3px;flex-shrink:0">chevron_right</span>
+        <span style="font-size:14px;line-height:1.7;color:rgba(13,13,13,0.75)">${r}</span>
+      </li>`;
+  });
+
+  // Qualifications
+  const qDiv = document.getElementById('job-qualifications');
+  job.qualifications.forEach(q => {
+    qDiv.innerHTML += `
+      <span class="req-chip">
+        <span class="material-symbols-outlined">check_small</span>${q}
+      </span>`;
+  });
+
+  // Benefits
+  const bDiv = document.getElementById('job-benefits');
+  job.benefits.forEach(b => {
+    bDiv.innerHTML += `
+      <div style="background:#fff;border:1px solid rgba(165,0,0,0.12);padding:20px;display:flex;flex-direction:column;gap:8px">
+        <span class="material-symbols-outlined" style="color:#A50000;font-size:24px">${b.icon}</span>
+        <div style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#0D0D0D">${b.label}</div>
+        <div style="font-size:12px;color:rgba(13,13,13,0.55)">${b.desc}</div>
+      </div>`;
+  });
+})();
+
+/* ════════════════════════════════
+   File upload display
+════════════════════════════════ */
+function handleFileChange(input) {
+  const nameEl = document.getElementById('file-name');
+  if (input.files && input.files[0]) {
+    nameEl.textContent = '✓ ' + input.files[0].name;
+    nameEl.style.display = 'block';
+    document.getElementById('upload-area').style.borderColor = '#A50000';
+    document.getElementById('upload-area').style.background  = 'rgba(165,0,0,0.03)';
+  }
+}
+
+/* ════════════════════════════════
+   Form submit
+════════════════════════════════ */
+document.getElementById('apply-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  // Simple validation
+  const required = ['nama','email','telepon','pendidikan'];
+  let valid = true;
+  required.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.style.borderColor = '#ba1a1a';
+      valid = false;
+    } else {
+      el.style.borderColor = 'rgba(165,0,0,0.2)';
+    }
+  });
+  if (!valid) return;
+
+  // Simulate submit — show toast
+  const btn = this.querySelector('.btn-submit');
+  btn.textContent = 'Mengirim...';
+  btn.disabled = true;
+  btn.style.background = '#555';
+
+  setTimeout(() => {
+    btn.textContent = '✓ Lamaran Terkirim';
+    btn.style.background = '#1a6e2e';
+
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 4500);
+
+    // Reset after delay
+    setTimeout(() => {
+      this.reset();
+      document.getElementById('file-name').style.display = 'none';
+      document.getElementById('upload-area').style.borderColor = 'rgba(165,0,0,0.3)';
+      document.getElementById('upload-area').style.background = '#fff';
+      btn.textContent = 'Kirim Lamaran';
+      btn.disabled = false;
+      btn.style.background = '#A50000';
+    }, 3000);
+  }, 1500);
+});
+</script>
+</body>
+</html>

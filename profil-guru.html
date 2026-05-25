@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profil Guru | Ignatius Global School</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link rel="icon" type="image/webp" href="logo_igs.webp"/>
+<link rel="shortcut icon" type="image/webp" href="logo_igs.webp"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --crimson: #A50000;
+    --gold:    #C9922A;
+    --midnight:#1a2a6c;
+    --ink:     #0D0D0D;
+    --canvas:  #F5F0EB;
+  }
+  body { background: var(--canvas); font-family: 'DM Sans', sans-serif; color: var(--ink); }
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; }
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background: var(--canvas); }
+  ::-webkit-scrollbar-thumb { background: var(--ink); }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+  .fade-up { animation: fadeUp 0.7s ease forwards; }
+  .fade-up-delay-1 { animation: fadeUp 0.7s 0.15s ease both; }
+  .fade-up-delay-2 { animation: fadeUp 0.7s 0.3s ease both; }
+  .fade-up-delay-3 { animation: fadeUp 0.7s 0.45s ease both; }
+  .fade-up-delay-4 { animation: fadeUp 0.7s 0.6s ease both; }
+
+  .stat-card { border-left: 3px solid var(--gold); }
+  .tag-badge { display:inline-block; background:var(--crimson); color:#fff; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; padding:4px 12px; }
+  .photo-frame { position:relative; }
+  .photo-frame::after { content:''; position:absolute; bottom:-16px; right:-16px; width:80%; height:80%; border:2px solid var(--gold); z-index:-1; }
+  .section-line { height:1px; background: linear-gradient(to right, var(--crimson), transparent); }
+
+  .skill-bar-bg { background: rgba(13,13,13,0.08); height:4px; border-radius:2px; overflow:hidden; }
+  .skill-bar-fill { height:100%; background: var(--crimson); border-radius:2px; transition: width 1.2s cubic-bezier(.16,1,.3,1); }
+
+  /* Navbar */
+  .navbar { background: rgba(245,240,235,0.92); backdrop-filter:blur(20px); border-bottom:1px solid rgba(13,13,13,0.08); }
+
+  /* Not found state */
+  #not-found { display:none; }
+</style>
+
+<script>
+// ── Teacher data ──────────────────────────────────────────────
+const GURU_DATA = {
+  'budi-santoso': {
+    name:     'Budi Santoso, S.Pd.',
+    jabatan:  'Guru Matematika',
+    level:    'SD',
+    levelColor: '#A50000',
+    since:    '2015',
+    years:    9,
+    img:      'https://lh3.googleusercontent.com/aida-public/AB6AXuDLbMD80VcJapHYPM79cxvYzlrwCBqNT95VYQOB0m7Mhw2yNnkyVB8kTbxldrYG9QbqAVQb3K0mXlLFkwZ14hP9sds_fhryJeMfKX501UvXeDLoraUiROGXFDiGetTt-RX7wKDGmM6u38IbmYmA2uTDr1PajjIWbOf2QyNNJTi_aOqHsFpFD35Sc54qP_VLd1eAjl3fnQUGGZjWaCAptnhCytKzeL2Bp2ps-dWVGcLiRLyz3ZVmJyW489p_1diF6BXweefttTGT7vxO',
+    pendidikan: 'S1 Pendidikan Matematika, Universitas Riau (2013)',
+    email:    'budi.santoso@igs.sch.id',
+    sertifikasi: ['Sertifikasi Guru Profesional', 'Pelatihan K-13 & Merdeka Belajar'],
+    bio:      'Budi Santoso adalah pendidik berdedikasi yang telah mengabdi di Ignatius Global School sejak tahun 2015. Dikenal dengan metode pembelajaran matematika yang menyenangkan dan mudah dipahami, beliau telah membantu ratusan siswa SD membangun fondasi matematika yang kuat. Budi percaya bahwa setiap anak memiliki potensi luar biasa yang hanya perlu dimunculkan dengan pendekatan yang tepat.',
+    prestasi: ['Guru Teladan IGS 2019', 'Siswa bimbingannya meraih medali emas Olimpiade Matematika tingkat Provinsi 2022', 'Pemateri seminar metode pembelajaran aktif se-Riau'],
+    skills:   [{ label:'Pedagogik', pct:92 }, { label:'Komunikasi', pct:88 }, { label:'Inovasi Pembelajaran', pct:85 }, { label:'Pembimbingan Siswa', pct:90 }],
+    motto:    '"Matematika bukan soal rumus, melainkan soal cara berpikir."',
+    mapel:    ['Matematika SD Kelas 1–6', 'Olimpiade Matematika SD'],
+  },
+  'siti-rahayu': {
+    name:     'Siti Rahayu, M.Pd.',
+    jabatan:  'Guru Bahasa Indonesia',
+    level:    'SMP',
+    levelColor: '#1a2a6c',
+    since:    '2012',
+    years:    12,
+    img:      'https://lh3.googleusercontent.com/aida-public/AB6AXuCeFRjewtrwvndZn-yTBZN5lGJq3Qc_XQhWQBkJsw8HoJsu9Og3NnU_5McXId-DkdWsX0UcUFbt-1q3MQQz9luOwMQsxkkjh6-fZ7547Bz_0eyZnkV0zpKxDot_DuLn7zhFV33NckWeUOhmQs6cvax2RVBHYfiIqEWQVRH9b3xDuWtJKZ96KDoILNke4fSP62tN8Uy2NGbk444SKe6Y_OCucG4kJy1zAMAqV2hk0YQaOVMAV-Sta8eNCrSEwmoJHmpoYK_ibwrImaSl',
+    pendidikan: 'S2 Pendidikan Bahasa Indonesia, Universitas Negeri Padang (2010)',
+    email:    'siti.rahayu@igs.sch.id',
+    sertifikasi: ['Sertifikasi Guru Profesional', 'Pelatihan Literasi Nasional Kemendikbud'],
+    bio:      'Siti Rahayu adalah salah satu pilar pengajar di IGS dengan pengalaman lebih dari 12 tahun. Memiliki gelar Magister Pendidikan, beliau telah membangun program literasi sekolah yang menjadi rujukan sekolah-sekolah lain di Pekanbaru. Pendekatannya yang humanis membuat siswa merasa aman berekspresi dalam bahasa tulis maupun lisan.',
+    prestasi: ['Koordinator Program Literasi IGS sejak 2016', 'Penulis buku panduan menulis kreatif untuk siswa SMP', 'Pembina ekskul Jurnalistik yang memenangkan 3 kejuaraan regional'],
+    skills:   [{ label:'Literasi & Menulis', pct:95 }, { label:'Komunikasi Publik', pct:90 }, { label:'Pengembangan Kurikulum', pct:87 }, { label:'Pembimbingan Karya Ilmiah', pct:88 }],
+    motto:    '"Bahasa adalah jendela peradaban. Ajarkan siswa membuka jendela itu."',
+    mapel:    ['Bahasa Indonesia SMP Kelas 7–9', 'Ekstrakurikuler Jurnalistik'],
+  },
+  'ahmad-fauzi': {
+    name:     'Ahmad Fauzi, M.Si.',
+    jabatan:  'Guru Fisika',
+    level:    'SMA',
+    levelColor: '#1a2a6c',
+    since:    '2018',
+    years:    6,
+    img:      'https://lh3.googleusercontent.com/aida-public/AB6AXuBjRtd1tvWrwio8uMp86m71KgZ08xgvDxf3eB-vJjQvHOBG-8UbglTFqajLc0Htvq-0xtyw6yIx3heALLGlR8ooHcwhujQYt0BpKBcf_GTxvkmpJ2Y045CAmsOAxM6DurmKeEpIkor5D1nYGeBKjRsxWXdvOhj90nKTpE3NX0Ceb7ukpnSfmg9e8o4yhaHcOudzdyqksiI_h_BZZfAtjipWDVWusR_S7UvusXy3EWGsnRMf6-cShNlDq2BzgC30N7XhLOzalHV3NPDp',
+    pendidikan: 'S2 Fisika Terapan, Institut Teknologi Bandung (2016)',
+    email:    'ahmad.fauzi@igs.sch.id',
+    sertifikasi: ['Sertifikasi Guru Profesional', 'Pelatihan STEM Education International'],
+    bio:      'Ahmad Fauzi membawa semangat riset ITB ke ruang kelas SMA IGS. Dengan latar belakang S2 Fisika Terapan, beliau merancang eksperimen sains yang relevan dengan kehidupan nyata sehingga siswa memahami fisika bukan sekadar teori. Beberapa siswanya telah berhasil diterima di jurusan teknik dan sains terkemuka di Indonesia.',
+    prestasi: ['Pembimbing Olimpiade Fisika Nasional – 3 siswa lolos ke OSN', 'Pengembang laboratorium fisika modern IGS (2021)', 'Narasumber workshop STEM tingkat Riau 2023'],
+    skills:   [{ label:'Fisika & Sains', pct:96 }, { label:'Desain Eksperimen', pct:91 }, { label:'Pembimbingan Olimpiade', pct:89 }, { label:'Penggunaan Teknologi', pct:85 }],
+    motto:    '"Fisika ada di mana-mana. Tugasku membuat siswa melihatnya."',
+    mapel:    ['Fisika SMA Kelas 10–12', 'Olimpiade Sains Nasional Fisika'],
+  },
+  'dewi-kusuma': {
+    name:     'Dewi Kusuma, S.Pd.',
+    jabatan:  'Guru IPA',
+    level:    'SD',
+    levelColor: '#A50000',
+    since:    '2017',
+    years:    7,
+    img:      'https://lh3.googleusercontent.com/aida-public/AB6AXuDLbMD80VcJapHYPM79cxvYzlrwCBqNT95VYQOB0m7Mhw2yNnkyVB8kTbxldrYG9QbqAVQb3K0mXlLFkwZ14hP9sds_fhryJeMfKX501UvXeDLoraUiROGXFDiGetTt-RX7wKDGmM6u38IbmYmA2uTDr1PajjIWbOf2QyNNJTi_aOqHsFpFD35Sc54qP_VLd1eAjl3fnQUGGZjWaCAptnhCytKzeL2Bp2ps-dWVGcLiRLyz3ZVmJyW489p_1diF6BXweefttTGT7vxO',
+    pendidikan: 'S1 Pendidikan IPA, Universitas Riau (2015)',
+    email:    'dewi.kusuma@igs.sch.id',
+    sertifikasi: ['Sertifikasi Guru Profesional', 'Pelatihan Pembelajaran Berbasis Proyek'],
+    bio:      'Dewi Kusuma adalah guru IPA kreatif yang menjadikan alam sebagai laboratorium belajar utama siswanya. Selama 7 tahun di IGS, beliau mengembangkan program "Sains Ceria" yang membuat anak-anak SD antusias melakukan eksplorasi ilmiah sederhana. Pendekatannya berbasis pengalaman langsung terbukti meningkatkan pemahaman dan rasa ingin tahu siswa.',
+    prestasi: ['Pengembang program Sains Ceria SD IGS', 'Pembina siswa peraih juara 1 lomba karya ilmiah tingkat kota 2023', 'Mentor guru muda dalam program induksi sekolah'],
+    skills:   [{ label:'IPA & Sains Dasar', pct:90 }, { label:'Pembelajaran Experiential', pct:93 }, { label:'Kreativitas Mengajar', pct:91 }, { label:'Komunikasi Anak', pct:94 }],
+    motto:    '"Beri anak pengalaman nyata, dan mereka akan mengingat sains seumur hidup."',
+    mapel:    ['IPA SD Kelas 3–6', 'Proyek Sains Ceria'],
+  },
+  'rizky-pratama': {
+    name:     'Rizky Pratama, S.Kom.',
+    jabatan:  'Guru Informatika',
+    level:    'SMP',
+    levelColor: '#1a2a6c',
+    since:    '2020',
+    years:    4,
+    img:      'https://lh3.googleusercontent.com/aida-public/AB6AXuCeFRjewtrwvndZn-yTBZN5lGJq3Qc_XQhWQBkJsw8HoJsu9Og3NnU_5McXId-DkdWsX0UcUFbt-1q3MQQz9luOwMQsxkkjh6-fZ7547Bz_0eyZnkV0zpKxDot_DuLn7zhFV33NckWeUOhmQs6cvax2RVBHYfiIqEWQVRH9b3xDuWtJKZ96KDoILNke4fSP62tN8Uy2NGbk444SKe6Y_OCucG4kJy1zAMAqV2hk0YQaOVMAV-Sta8eNCrSEwmoJHmpoYK_ibwrImaSl',
+    pendidikan: 'S1 Teknik Informatika, Universitas Andalas (2018)',
+    email:    'rizky.pratama@igs.sch.id',
+    sertifikasi: ['Sertifikasi Google for Education', 'Pelatihan Computational Thinking Kemendikbud'],
+    bio:      'Rizky Pratama adalah generasi muda pengajar teknologi di IGS. Dengan latar belakang teknik informatika, beliau mengintegrasikan pemrograman, desain digital, dan literasi data ke dalam pembelajaran informatika SMP yang relevan dan futuristik. Rizky mendorong siswanya tidak hanya mengonsumsi teknologi, tetapi juga menciptakannya.',
+    prestasi: ['Pembina tim robotik SMP IGS – juara 2 regional 2023', 'Pengembang platform e-learning internal IGS', 'Instruktur coding camp liburan sekolah'],
+    skills:   [{ label:'Pemrograman & Coding', pct:94 }, { label:'Desain Digital', pct:88 }, { label:'Integrasi Teknologi', pct:92 }, { label:'Kreativitas Digital', pct:90 }],
+    motto:    '"Kode adalah bahasa masa depan. Kita ajarkan dari sekarang."',
+    mapel:    ['Informatika SMP Kelas 7–9', 'Ekstrakurikuler Robotik & Coding'],
+  },
+  'lestari-wulandari': {
+    name:     'Lestari Wulandari, M.Pd.',
+    jabatan:  'Guru Kimia',
+    level:    'SMA',
+    levelColor: '#1a2a6c',
+    since:    '2010',
+    years:    14,
+    img:      'https://lh3.googleusercontent.com/aida-public/AB6AXuBjRtd1tvWrwio8uMp86m71KgZ08xgvDxf3eB-vJjQvHOBG-8UbglTFqajLc0Htvq-0xtyw6yIx3heALLGlR8ooHcwhujQYt0BpKBcf_GTxvkmpJ2Y045CAmsOAxM6DurmKeEpIkor5D1nYGeBKjRsxWXdvOhj90nKTpE3NX0Ceb7ukpnSfmg9e8o4yhaHcOudzdyqksiI_h_BZZfAtjipWDVWusR_S7UvusXy3EWGsnRMf6-cShNlDq2BzgC30N7XhLOzalHV3NPDp',
+    pendidikan: 'S2 Pendidikan Kimia, Universitas Negeri Padang (2008)',
+    email:    'lestari.wulandari@igs.sch.id',
+    sertifikasi: ['Sertifikasi Guru Profesional', 'Pelatihan Laboratorium Sains Berstandar Nasional'],
+    bio:      'Lestari Wulandari adalah veteran pengajar IGS dengan pengalaman 14 tahun yang tak tertandingi. Sebagai koordinator lab sains, beliau memastikan setiap praktikum kimia berlangsung aman, terstandar, dan bermakna. Ratusan alumni IGS yang kini berkarier di bidang sains, kedokteran, dan teknik menyebut Bu Lestari sebagai inspirator utama mereka.',
+    prestasi: ['Koordinator Laboratorium Sains IGS', 'Guru Berprestasi tingkat Kota Pekanbaru 2020', 'Pembimbing 5 siswa ke OSN Kimia Nasional'],
+    skills:   [{ label:'Kimia & Lab Sains', pct:97 }, { label:'Manajemen Laboratorium', pct:95 }, { label:'Pembimbingan Olimpiade', pct:93 }, { label:'Pengembangan Kurikulum', pct:89 }],
+    motto:    '"Di laboratorium, siswa belajar bahwa kesabaran dan ketelitian adalah segalanya."',
+    mapel:    ['Kimia SMA Kelas 10–12', 'Olimpiade Kimia Nasional', 'Koordinasi Lab Sains'],
+  },
+  'hendra-wijaya': {
+    name:     'Hendra Wijaya, S.Pd.',
+    jabatan:  'Guru Pendidikan Jasmani',
+    level:    'SD',
+    levelColor: '#A50000',
+    since:    '2016',
+    years:    8,
+    img:      'https://lh3.googleusercontent.com/aida-public/AB6AXuDLbMD80VcJapHYPM79cxvYzlrwCBqNT95VYQOB0m7Mhw2yNnkyVB8kTbxldrYG9QbqAVQb3K0mXlLFkwZ14hP9sds_fhryJeMfKX501UvXeDLoraUiROGXFDiGetTt-RX7wKDGmM6u38IbmYmA2uTDr1PajjIWbOf2QyNNJTi_aOqHsFpFD35Sc54qP_VLd1eAjl3fnQUGGZjWaCAptnhCytKzeL2Bp2ps-dWVGcLiRLyz3ZVmJyW489p_1diF6BXweefttTGT7vxO',
+    pendidikan: 'S1 Pendidikan Jasmani & Olahraga, Universitas Riau (2014)',
+    email:    'hendra.wijaya@igs.sch.id',
+    sertifikasi: ['Sertifikasi Guru Profesional', 'Lisensi Pelatih Bulutangkis PBSI'],
+    bio:      'Hendra Wijaya adalah guru penjas yang memahami bahwa olahraga adalah fondasi karakter. Selama 8 tahun di IGS, beliau membangun budaya aktif bergerak yang sehat dan kompetitif di kalangan siswa SD. Beliau juga menjadi pembina tim olahraga sekolah yang telah menorehkan berbagai prestasi di tingkat kota dan provinsi.',
+    prestasi: ['Pembina tim bulutangkis – juara 1 O2SN tingkat kota 3 kali berturut-turut', 'Pengembang program senam pagi rutin IGS', 'Pelatih fisik siswa berprestasi olahraga nasional'],
+    skills:   [{ label:'Olahraga & Kebugaran', pct:95 }, { label:'Pelatihan Atletik', pct:91 }, { label:'Pembinaan Karakter', pct:93 }, { label:'Manajemen Tim', pct:88 }],
+    motto:    '"Tubuh sehat, pikiran tajam, karakter kuat — itulah tujuan pendidikan jasmani."',
+    mapel:    ['PJOK SD Kelas 1–6', 'Pembinaan Tim Olahraga Sekolah'],
+  },
+  'nita-anggraeni': {
+    name:     'Nita Anggraeni, M.Pd.',
+    jabatan:  'Guru Bahasa Inggris',
+    level:    'SMP',
+    levelColor: '#1a2a6c',
+    since:    '2013',
+    years:    11,
+    img:      'https://lh3.googleusercontent.com/aida-public/AB6AXuCeFRjewtrwvndZn-yTBZN5lGJq3Qc_XQhWQBkJsw8HoJsu9Og3NnU_5McXId-DkdWsX0UcUFbt-1q3MQQz9luOwMQsxkkjh6-fZ7547Bz_0eyZnkV0zpKxDot_DuLn7zhFV33NckWeUOhmQs6cvax2RVBHYfiIqEWQVRH9b3xDuWtJKZ96KDoILNke4fSP62tN8Uy2NGbk444SKe6Y_OCucG4kJy1zAMAqV2hk0YQaOVMAV-Sta8eNCrSEwmoJHmpoYK_ibwrImaSl',
+    pendidikan: 'S2 Pendidikan Bahasa Inggris, Universitas Negeri Padang (2011)',
+    email:    'nita.anggraeni@igs.sch.id',
+    sertifikasi: ['Sertifikasi Guru Profesional', 'TOEFL Score 610', 'Cambridge TKT (Teaching Knowledge Test)'],
+    bio:      'Nita Anggraeni adalah penggerak utama program bilingual IGS tingkat SMP. Dengan skor TOEFL 610 dan sertifikasi Cambridge TKT, beliau memastikan siswa mendapatkan paparan bahasa Inggris berkualitas internasional. Pendekatannya yang komunikatif dan kontekstual membuat siswa berani berbicara bahasa Inggris tanpa rasa takut salah.',
+    prestasi: ['Koordinator Program Bilingual SMP IGS', 'Siswa bimbingannya meraih juara 1 Speech Contest tingkat provinsi 2022', 'Penyelenggara English Camp tahunan IGS'],
+    skills:   [{ label:'Bahasa Inggris', pct:97 }, { label:'Komunikasi Internasional', pct:94 }, { label:'Desain Program Bilingual', pct:90 }, { label:'Public Speaking', pct:92 }],
+    motto:    '"Bahasa Inggris bukan hambatan, melainkan jembatan menuju dunia."',
+    mapel:    ['Bahasa Inggris SMP Kelas 7–9', 'English Club & Speech Contest', 'Program Bilingual'],
+  },
+};
+</script>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3 no-underline text-inherit">
+      <img src="logo_igs.webp" alt="Ignatius Global School" style="height:44px;width:auto;object-fit:contain;display:block">
+    </a>
+    <a href="index.html#karyawan" class="flex items-center gap-2 text-sm uppercase tracking-widest no-underline" style="color:var(--crimson);font-size:11px;letter-spacing:0.12em">
+      <span class="material-symbols-outlined" style="font-size:18px">arrow_back</span>
+      Kembali
+    </a>
+  </div>
+</nav>
+
+<!-- Not found state -->
+<div id="not-found" class="min-h-screen flex flex-col items-center justify-center text-center px-6">
+  <span class="material-symbols-outlined text-6xl mb-6" style="color:var(--gold)">person_off</span>
+  <h1 class="text-3xl font-bold uppercase tracking-tight mb-3" style="font-family:'EB Garamond',serif">Profil Tidak Ditemukan</h1>
+  <p class="text-sm opacity-50 mb-8">ID guru tidak valid atau tidak tersedia.</p>
+  <a href="index.html#karyawan" class="inline-flex items-center gap-2 px-6 py-3 text-white text-xs uppercase tracking-widest no-underline" style="background:var(--crimson);letter-spacing:0.12em">
+    <span class="material-symbols-outlined" style="font-size:16px">arrow_back</span>
+    Lihat Semua Guru
+  </a>
+</div>
+
+<!-- Main Profile Content -->
+<main id="profile-content" style="display:none">
+
+  <!-- Hero Section -->
+  <section style="background:var(--ink)" class="relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+
+      <!-- Text Side -->
+      <div class="fade-up order-2 md:order-1">
+        <div id="level-badge" class="tag-badge mb-5" style="display:inline-block"></div>
+        <h1 id="guru-name" class="text-4xl md:text-6xl uppercase tracking-tighter text-white mb-3" style="font-family:'EB Garamond',serif;line-height:1.05"></h1>
+        <p id="guru-jabatan" class="text-sm uppercase tracking-widest mb-8" style="color:var(--gold);letter-spacing:0.15em"></p>
+        <div class="h-px mb-8" style="background:rgba(255,255,255,0.12)"></div>
+
+        <!-- Stats row -->
+        <div class="flex flex-wrap gap-8">
+          <div>
+            <div id="stat-years" class="text-4xl font-bold text-white" style="font-family:'EB Garamond',serif"></div>
+            <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.4)">Tahun Mengajar</div>
+          </div>
+          <div>
+            <div id="stat-since" class="text-4xl font-bold text-white" style="font-family:'EB Garamond',serif"></div>
+            <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.4)">Bergabung Sejak</div>
+          </div>
+          <div>
+            <div id="stat-level" class="text-4xl font-bold text-white" style="font-family:'EB Garamond',serif"></div>
+            <div class="text-xs uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.4)">Jenjang</div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mt-8 flex items-center gap-3">
+          <span class="material-symbols-outlined" style="color:var(--gold);font-size:18px">mail</span>
+          <a id="guru-email" href="#" class="text-sm no-underline" style="color:rgba(255,255,255,0.5);letter-spacing:0.05em"></a>
+        </div>
+      </div>
+
+      <!-- Photo Side -->
+      <div class="fade-up-delay-1 order-1 md:order-2 flex justify-center md:justify-end">
+        <div class="photo-frame" style="width:min(340px,80vw)">
+          <img id="guru-photo" src="" alt="" class="w-full object-cover" style="aspect-ratio:3/4;object-position:center top"/>
+          <!-- Gold corner accent -->
+          <div class="absolute top-0 right-0 w-0 h-0" style="border-style:solid;border-width:0 60px 60px 0;border-color:transparent var(--gold) transparent transparent;z-index:5"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bio + Skills + Mapel -->
+  <section class="max-w-7xl mx-auto px-6 py-16 md:py-20 grid md:grid-cols-3 gap-12">
+
+    <!-- Biografi -->
+    <div class="md:col-span-2 fade-up-delay-2">
+      <span class="text-xs uppercase tracking-widest block mb-3" style="color:var(--crimson);letter-spacing:0.15em">Tentang</span>
+      <h2 class="text-2xl uppercase tracking-tight mb-1" style="font-family:'EB Garamond',serif">Biografi</h2>
+      <div class="section-line mb-6" style="width:60px"></div>
+      <p id="guru-bio" class="leading-relaxed mb-8" style="color:rgba(13,13,13,0.7);font-size:15px;line-height:1.8"></p>
+
+      <!-- Motto -->
+      <blockquote id="guru-motto" class="border-l-4 pl-5 py-2 italic text-lg" style="border-color:var(--gold);color:var(--crimson);font-family:'EB Garamond',serif;font-size:1.15rem"></blockquote>
+
+      <!-- Pendidikan -->
+      <div class="mt-10">
+        <span class="text-xs uppercase tracking-widest block mb-3" style="color:var(--crimson);letter-spacing:0.15em">Latar Belakang</span>
+        <h3 class="text-xl uppercase tracking-tight mb-1" style="font-family:'EB Garamond',serif">Pendidikan</h3>
+        <div class="section-line mb-5" style="width:40px"></div>
+        <div id="guru-pendidikan" class="flex items-start gap-3 p-4 stat-card" style="background:white">
+          <span class="material-symbols-outlined mt-0.5" style="color:var(--gold);font-size:20px">school</span>
+          <span style="font-size:14px;color:rgba(13,13,13,0.75)"></span>
+        </div>
+      </div>
+
+      <!-- Sertifikasi -->
+      <div class="mt-8">
+        <span class="text-xs uppercase tracking-widest block mb-3" style="color:var(--crimson);letter-spacing:0.15em">Kompetensi</span>
+        <h3 class="text-xl uppercase tracking-tight mb-1" style="font-family:'EB Garamond',serif">Sertifikasi</h3>
+        <div class="section-line mb-5" style="width:40px"></div>
+        <ul id="guru-sertifikasi" class="space-y-2"></ul>
+      </div>
+    </div>
+
+    <!-- Sidebar: Skills + Mapel + Prestasi -->
+    <div class="space-y-10 fade-up-delay-3">
+
+      <!-- Kompetensi Unggulan -->
+      <div>
+        <span class="text-xs uppercase tracking-widest block mb-3" style="color:var(--crimson);letter-spacing:0.15em">Penilaian</span>
+        <h3 class="text-xl uppercase tracking-tight mb-1" style="font-family:'EB Garamond',serif">Kompetensi</h3>
+        <div class="section-line mb-5" style="width:40px"></div>
+        <div id="guru-skills" class="space-y-4"></div>
+      </div>
+
+      <!-- Mata Pelajaran -->
+      <div>
+        <span class="text-xs uppercase tracking-widest block mb-3" style="color:var(--crimson);letter-spacing:0.15em">Kelas</span>
+        <h3 class="text-xl uppercase tracking-tight mb-1" style="font-family:'EB Garamond',serif">Mata Pelajaran</h3>
+        <div class="section-line mb-5" style="width:40px"></div>
+        <ul id="guru-mapel" class="space-y-2"></ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Prestasi -->
+  <section style="background:white" class="fade-up-delay-4">
+    <div class="max-w-7xl mx-auto px-6 py-16">
+      <span class="text-xs uppercase tracking-widest block mb-3" style="color:var(--crimson);letter-spacing:0.15em">Pencapaian</span>
+      <h2 class="text-3xl uppercase tracking-tight mb-1" style="font-family:'EB Garamond',serif">Prestasi & Penghargaan</h2>
+      <div class="section-line mb-10" style="width:80px"></div>
+      <div id="guru-prestasi" class="grid md:grid-cols-3 gap-6"></div>
+    </div>
+  </section>
+
+  <!-- CTA Footer -->
+  <section style="background:var(--ink)" class="py-16 text-center">
+    <p class="text-xs uppercase tracking-widest mb-3" style="color:var(--gold);letter-spacing:0.15em">Ignatius Global School</p>
+    <h2 class="text-3xl md:text-5xl uppercase tracking-tighter text-white mb-8" style="font-family:'EB Garamond',serif">Tim Pengajar Profesional</h2>
+    <a href="index.html#karyawan" class="inline-flex items-center gap-2 px-8 py-4 text-white text-xs uppercase tracking-widest no-underline transition-opacity hover:opacity-80" style="background:var(--crimson);letter-spacing:0.15em">
+      <span class="material-symbols-outlined" style="font-size:18px">group</span>
+      Lihat Semua Guru
+    </a>
+  </section>
+
+</main>
+
+<script>
+// ── Render profile from URL param ────────────────────────────
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  const guru = GURU_DATA[id];
+
+  if (!guru) {
+    document.getElementById('not-found').style.display = 'flex';
+    document.title = 'Profil Tidak Ditemukan | IGS';
+    return;
+  }
+
+  document.getElementById('profile-content').style.display = 'block';
+  document.title = guru.name + ' | IGS';
+
+  // Basic info
+  document.getElementById('guru-name').textContent     = guru.name;
+  document.getElementById('guru-jabatan').textContent  = guru.jabatan;
+  document.getElementById('guru-bio').textContent      = guru.bio;
+  document.getElementById('guru-motto').textContent    = guru.motto;
+  document.getElementById('guru-email').textContent    = guru.email;
+  document.getElementById('guru-email').href           = 'mailto:' + guru.email;
+  document.getElementById('guru-photo').src            = guru.img;
+  document.getElementById('guru-photo').alt            = guru.name;
+
+  // Stats
+  document.getElementById('stat-years').textContent  = guru.years;
+  document.getElementById('stat-since').textContent  = guru.since;
+  document.getElementById('stat-level').textContent  = guru.level;
+
+  // Level badge
+  const badge = document.getElementById('level-badge');
+  badge.textContent = guru.level;
+  badge.style.background = guru.levelColor;
+
+  // Pendidikan
+  const pendEl = document.getElementById('guru-pendidikan');
+  pendEl.querySelector('span:last-child').textContent = guru.pendidikan;
+
+  // Sertifikasi
+  const sertEl = document.getElementById('guru-sertifikasi');
+  guru.sertifikasi.forEach(s => {
+    const li = document.createElement('li');
+    li.className = 'flex items-start gap-2';
+    li.innerHTML = `<span class="material-symbols-outlined flex-shrink-0" style="color:var(--gold);font-size:16px;margin-top:2px">verified</span><span style="font-size:14px;color:rgba(13,13,13,0.75)">${s}</span>`;
+    sertEl.appendChild(li);
+  });
+
+  // Skills (render bars, animate after paint)
+  const skillsEl = document.getElementById('guru-skills');
+  guru.skills.forEach(sk => {
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <div class="flex justify-between mb-1">
+        <span style="font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(13,13,13,0.6)">${sk.label}</span>
+        <span style="font-size:12px;font-weight:600">${sk.pct}%</span>
+      </div>
+      <div class="skill-bar-bg"><div class="skill-bar-fill" data-pct="${sk.pct}" style="width:0%"></div></div>`;
+    skillsEl.appendChild(div);
+  });
+
+  // Mapel
+  const mapelEl = document.getElementById('guru-mapel');
+  guru.mapel.forEach(m => {
+    const li = document.createElement('li');
+    li.className = 'flex items-center gap-2';
+    li.innerHTML = `<span class="material-symbols-outlined flex-shrink-0" style="color:var(--crimson);font-size:16px">bookmark</span><span style="font-size:14px;color:rgba(13,13,13,0.75)">${m}</span>`;
+    mapelEl.appendChild(li);
+  });
+
+  // Prestasi cards
+  const prestasiEl = document.getElementById('guru-prestasi');
+  guru.prestasi.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'p-6';
+    div.style.cssText = 'background:var(--canvas);border-top:3px solid var(--gold)';
+    div.innerHTML = `
+      <div class="text-3xl font-bold mb-3" style="font-family:'EB Garamond',serif;color:var(--gold)">${String(i+1).padStart(2,'0')}</div>
+      <p style="font-size:14px;color:rgba(13,13,13,0.75);line-height:1.7">${p}</p>`;
+    prestasiEl.appendChild(div);
+  });
+
+  // Animate skill bars after a short delay
+  setTimeout(() => {
+    document.querySelectorAll('.skill-bar-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 400);
+})();
+</script>
+</body>
+</html>

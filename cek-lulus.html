@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cek Kelulusan PPDB — Ignatius Global School</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link rel="icon" type="image/webp" href="logo_igs.webp"/>
+<link rel="shortcut icon" type="image/webp" href="logo_igs.webp"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          "ink-black":"#0D0D0D","canvas-off-white":"#F5F0EB",
+          "crimson-heritage":"#A50000","electric-midnight":"#0A1172",
+          "signal-gold":"#C9922A","on-surface":"#1d1b19",
+          "primary":"#790000","primary-container":"#a50000",
+          "surface":"#fef8f3","background":"#fef8f3",
+        },
+        fontFamily: {
+          "display-lg":["EB Garamond"],"label-sm":["DM Sans"],
+          "body-lg":["DM Sans"],"body-md":["DM Sans"],
+        },
+        spacing: { "margin-edge":"64px" }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; }
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:#F5F0EB; }
+  ::-webkit-scrollbar-thumb { background:#0D0D0D; }
+
+  /* Cursor */
+  #cursor-dot  { width:8px;height:8px;background:#A50000;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .08s ease-out; }
+  #cursor-ring { width:32px;height:32px;border:1.5px solid #A50000;border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .18s ease-out,top .18s ease-out,background .2s; }
+  body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring { background:rgba(165,0,0,.15); }
+
+  /* Navbar */
+  #header-inner {
+    position:relative;background:rgba(255,255,255,0.92);backdrop-filter:blur(28px);
+    -webkit-backdrop-filter:blur(28px);border-radius:16px;border:1px solid rgba(165,0,0,0.18);
+    box-shadow:0 8px 40px rgba(0,0,0,0.14),0 1px 0 rgba(255,255,255,0.9) inset,0 0 0 1px rgba(165,0,0,0.06) inset;
+    padding:0 8px;transition:all 0.4s cubic-bezier(.16,1,.3,1);width:fit-content;
+    max-width:calc(100vw - 48px);margin:0 auto;overflow:visible;
+  }
+  header { display:flex;align-items:center;justify-content:center;top:16px !important;padding:0 24px !important; }
+  header.scrolled #header-inner { background:rgba(255,255,255,0.98);border-color:rgba(165,0,0,0.28);box-shadow:0 12px 48px rgba(0,0,0,0.18); }
+  header.scrolled #inquire-btn { background:#A50000 !important;color:#fff !important;border-color:#A50000 !important; }
+  header.scrolled #inquire-btn * { color:#fff !important; }
+
+  .nav-sep { display:inline-block;width:1px;height:16px;background:rgba(165,0,0,0.18);margin:0 1px;vertical-align:middle; }
+  .nav-link { font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.04em;color:#1a1a1a;transition:color .25s;white-space:nowrap;position:relative; }
+  .nav-link:hover { color:#A50000; }
+  .nav-link::before { content:'';position:absolute;top:-14px;left:50%;transform:translateX(-50%) scaleX(0);transform-origin:center;width:36px;height:4px;background:#A50000;border-radius:0 0 4px 4px;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1),opacity 0.25s ease;opacity:0; }
+  .nav-link[data-active]::before,.nav-link.active::before { transform:translateX(-50%) scaleX(1);opacity:1; }
+  .nav-link[data-active],.nav-link.active { color:#A50000 !important; }
+
+  #mobile-nav { transform:translateX(100%);transition:transform .35s cubic-bezier(.16,1,.3,1); }
+  #mobile-nav.open { transform:translateX(0); }
+
+  .nav-dropdown { position:relative; }
+  .nav-dropdown-menu { position:absolute;top:100%;left:50%;min-width:180px;background:#fff;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.14),0 0 0 1px rgba(0,0,0,0.06);padding:16px 0 6px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;transform:translateX(-50%) translateY(-4px);z-index:999; }
+  .nav-dropdown-menu::before { content:'';position:absolute;top:-16px;left:0;right:0;height:16px;background:transparent; }
+  .nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown:focus-within .nav-dropdown-menu { opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0); }
+  .nav-dropdown-item { display:block;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.03em;color:#1a1a1a;white-space:nowrap;transition:background .15s,color .15s; }
+  .nav-dropdown-item:hover { background:#fff5f5;color:#A50000; }
+  .nav-dropdown-item.active { background:#A50000;color:#fff !important; }
+  .nav-dropdown-arrow { display:inline-block;margin-left:3px;font-size:9px;transition:transform .2s;vertical-align:middle; }
+  .nav-dropdown:hover .nav-dropdown-arrow { transform:rotate(180deg); }
+  .nav-dropdown-divider { height:1px;background:rgba(0,0,0,0.07);margin:4px 0; }
+
+  /* Reveal */
+  .reveal { opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease; }
+  .reveal.visible { opacity:1;transform:translateY(0); }
+
+  /* Back to top */
+  #back-top { opacity:0;pointer-events:none;transition:opacity .3s; }
+  #back-top.show { opacity:1;pointer-events:all; }
+
+  /* Status badge */
+  .badge-lulus    { background:#dcfce7;color:#15803d;border:1px solid #86efac; }
+  .badge-tidak    { background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5; }
+  .badge-menunggu { background:#fef9c3;color:#a16207;border:1px solid #fde047; }
+
+  /* Table row hover */
+  .trow { transition:background .15s; }
+  .trow:hover { background:rgba(165,0,0,0.04); }
+
+  /* Search input focus */
+  .search-wrap { position:relative; }
+  .search-wrap::after { content:'';position:absolute;bottom:0;left:0;height:2px;width:0;background:#A50000;transition:width .4s ease; }
+  .search-wrap:focus-within::after { width:100%; }
+
+  /* Admin panel */
+  #admin-panel { display:none; }
+  #admin-panel.open { display:block; }
+
+  /* Responsive */
+  html,body { overflow-x:hidden;max-width:100vw; }
+  *,*::before,*::after { box-sizing:border-box; }
+
+  @media (max-width:639px) {
+    header { top:8px !important;padding:0 10px !important; }
+    #header-inner { width:calc(100vw - 20px) !important;max-width:calc(100vw - 20px) !important;height:52px !important;padding-left:12px !important;padding-right:8px !important; }
+    #inquire-btn { display:none !important; }
+  }
+  @media (min-width:640px) and (max-width:1023px) {
+    header { top:10px !important;padding:0 12px !important; }
+    #header-inner { width:calc(100vw - 24px) !important;max-width:calc(100vw - 24px) !important;height:56px !important; }
+  }
+  @media (max-width:420px) { #mobile-nav { width:100vw !important; } }
+
+  /* Hide table cols on mobile */
+  @media (max-width:767px) {
+    .col-hide-mobile { display:none; }
+  }
+
+  /* Fade in rows */
+  @keyframes fadeInRow { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .row-anim { animation:fadeInRow .35s ease both; }
+
+  /* New registration highlight */
+  @keyframes highlightRow { 0%{background:rgba(165,0,0,0.1)} 100%{background:transparent} }
+  .row-new { animation:highlightRow 4s ease forwards; }
+</style>
+</head>
+<body class="bg-canvas-off-white text-ink-black font-body-md overflow-x-hidden selection:bg-crimson-heritage selection:text-white">
+
+<div id="cursor-dot" class="hidden md:block"></div>
+<div id="cursor-ring" class="hidden md:block"></div>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<header id="header" class="fixed top-4 left-0 w-full z-50 transition-all duration-500 flex justify-center items-center pointer-events-none px-6" style="background:transparent;box-shadow:none">
+  <div id="header-inner" class="pointer-events-auto flex items-center justify-between w-full" style="height:62px;padding-left:18px;padding-right:14px;max-width:1200px;">
+    <a href="index.html" class="flex items-center gap-3 flex-shrink-0">
+      <img id="navbar-logo" src="logo_igs.webp" alt="IGS Logo"
+        onerror="this.style.display='none';document.getElementById('navbar-logo-fallback').style.display='flex'"
+        style="height:40px;width:auto;object-fit:contain;flex-shrink:0">
+      <div id="navbar-logo-fallback" style="width:40px;height:40px;border-radius:50%;background:#A50000;display:none;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="font-family:'EB Garamond',serif;font-size:16px;font-style:italic;font-weight:700;color:#fff;">IGS</span>
+      </div>
+      <div class="hidden sm:block">
+        <div style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:800;color:#0D0D0D;letter-spacing:0.12em;text-transform:uppercase;line-height:1">IGNATIUS</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:400;color:#A50000;letter-spacing:0.08em;text-transform:uppercase;line-height:1.4">Global School</div>
+      </div>
+    </a>
+
+    <nav class="hidden lg:flex items-center mx-3" style="gap:0">
+      <a href="index.html" class="nav-link px-3 py-2">Home</a>
+      <span class="nav-sep"></span>
+      <div class="nav-dropdown">
+        <button class="nav-link px-3 py-2 flex items-center" style="background:none;border:none;cursor:pointer">
+          PPDB <span class="nav-dropdown-arrow">▼</span>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="ppdb.html" class="nav-dropdown-item">Daftar</a>
+          <div class="nav-dropdown-divider"></div>
+          <a href="cek-lulus.html" class="nav-dropdown-item active">Cek Lulus</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href="index.html#kontak" id="inquire-btn" class="hidden sm:block px-5 py-2 font-label-sm uppercase tracking-widest transition-all duration-300 text-xs"
+        style="border-radius:4px;border:1.5px solid #A50000;background:transparent;color:#A50000;font-weight:600;letter-spacing:0.1em;transition:all .25s">
+        ← Beranda
+      </a>
+      <button id="mobile-menu-btn" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Menu" style="color:#1a1a1a" onclick="document.getElementById('mobile-nav').classList.toggle('open')">
+        <span style="display:block;width:22px;height:2px;background:currentColor;transition:all .3s"></span>
+        <span style="display:block;width:22px;height:2px;background:currentColor;transition:all .3s"></span>
+        <span style="display:block;width:14px;height:2px;background:currentColor;transition:all .3s"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<div id="mobile-nav" class="fixed top-0 right-0 h-full w-72 z-40 flex flex-col pt-24 pb-8 px-8 overflow-y-auto" style="background:#fff;box-shadow:-4px 0 30px rgba(0,0,0,0.12)">
+  <button onclick="document.getElementById('mobile-nav').classList.remove('open')" class="absolute top-6 right-6 text-ink-black">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+  <nav class="flex flex-col gap-0">
+    <a href="index.html" class="w-full py-4 font-label-sm uppercase tracking-widest text-ink-black hover:text-crimson-heritage transition-colors border-b border-black/8 block">← Beranda</a>
+    <a href="ppdb.html" class="w-full py-4 font-label-sm uppercase tracking-widest text-ink-black hover:text-crimson-heritage transition-colors border-b border-black/8 block">Formulir Pendaftaran</a>
+    <a href="cek-lulus.html" class="w-full py-4 font-label-sm uppercase tracking-widest text-crimson-heritage border-b border-black/8 block">Cek Lulus</a>
+  </nav>
+  <a href="ppdb.html" class="mt-8 bg-crimson-heritage text-white py-3 font-label-sm uppercase tracking-widest text-xs text-center block">Daftar Sekarang</a>
+</div>
+<div id="mobile-backdrop" class="fixed inset-0 z-30 bg-black/40 opacity-0 pointer-events-none transition-opacity duration-300" onclick="document.getElementById('mobile-nav').classList.remove('open')"></div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div style="background:linear-gradient(135deg,#0D0D0D 0%,#1a0000 100%);padding-top:120px;padding-bottom:60px">
+  <div class="px-6 md:px-margin-edge">
+    <div class="flex items-center gap-3 mb-6">
+      <a href="index.html" class="font-label-sm text-xs uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors">Beranda</a>
+      <span class="text-white/20 text-xs">/</span>
+      <a href="ppdb.html" class="font-label-sm text-xs uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors">PPDB</a>
+      <span class="text-white/20 text-xs">/</span>
+      <span class="font-label-sm text-xs uppercase tracking-widest text-crimson-heritage">Cek Lulus</span>
+    </div>
+    <p class="font-label-sm uppercase tracking-widest text-crimson-heritage text-xs mb-4">Penerimaan Peserta Didik Baru</p>
+    <h1 class="font-display-lg text-white leading-none mb-4" style="font-size:clamp(48px,8vw,96px);letter-spacing:-0.02em">CEK<br/>KELULUSAN</h1>
+    <p class="font-body-md text-white/50 max-w-xl text-base">Pantau status penerimaan pendaftaran Anda di Ignatius Global School. Masukkan nama atau nomor pendaftaran untuk melihat hasil seleksi.</p>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN CONTENT ═══════════ -->
+<main class="px-6 md:px-margin-edge py-16 min-h-screen" style="background:linear-gradient(180deg,#F5F0EB 0%,#edeae3 100%)">
+
+  <!-- Search + Filter Bar -->
+  <div class="reveal flex flex-col sm:flex-row gap-4 mb-10 items-start sm:items-end">
+    <div class="search-wrap flex-1">
+      <label class="font-label-sm uppercase text-ink-black/40 block mb-2 text-xs tracking-widest">Cari Nama / No. Pendaftaran</label>
+      <div class="flex items-center gap-3 border-b border-ink-black/30 pb-2">
+        <span class="material-symbols-outlined text-ink-black/30 text-lg">search</span>
+        <input id="search-input" type="text" placeholder="Ketik nama atau nomor pendaftaran…"
+          class="flex-1 bg-transparent outline-none font-body-md text-base placeholder:text-ink-black/20"
+          oninput="filterTable()"/>
+      </div>
+    </div>
+    <div class="search-wrap" style="min-width:180px">
+      <label class="font-label-sm uppercase text-ink-black/40 block mb-2 text-xs tracking-widest">Filter Status</label>
+      <select id="filter-status" onchange="filterTable()"
+        class="w-full bg-transparent border-b border-ink-black/30 pb-2 outline-none font-body-md text-base appearance-none cursor-pointer">
+        <option value="">Semua Status</option>
+        <option value="Lulus">Lulus</option>
+        <option value="Tidak Lulus">Tidak Lulus</option>
+        <option value="Menunggu">Menunggu</option>
+      </select>
+    </div>
+    <div class="search-wrap" style="min-width:180px">
+      <label class="font-label-sm uppercase text-ink-black/40 block mb-2 text-xs tracking-widest">Filter Jenjang</label>
+      <select id="filter-jenjang" onchange="filterTable()"
+        class="w-full bg-transparent border-b border-ink-black/30 pb-2 outline-none font-body-md text-base appearance-none cursor-pointer">
+        <option value="">Semua Jenjang</option>
+        <option>SMA IPA</option>
+        <option>SMA IPS</option>
+        <option>SMP</option>
+        <option>SD IGS VETERAN</option>
+        <option>SD IGS CGC</option>
+        <option>PG / TK IGS CGC</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Stats row -->
+  <div id="stats-row" class="reveal grid grid-cols-3 gap-4 mb-10 max-w-lg">
+    <div class="border border-ink-black/15 p-4 text-center" style="border-left:4px solid #15803d">
+      <div id="stat-lulus" class="font-display-lg text-3xl text-ink-black leading-none">0</div>
+      <div class="font-label-sm text-xs uppercase tracking-widest text-ink-black/40 mt-1">Lulus</div>
+    </div>
+    <div class="border border-ink-black/15 p-4 text-center" style="border-left:4px solid #b91c1c">
+      <div id="stat-tidak" class="font-display-lg text-3xl text-ink-black leading-none">0</div>
+      <div class="font-label-sm text-xs uppercase tracking-widest text-ink-black/40 mt-1">Tidak Lulus</div>
+    </div>
+    <div class="border border-ink-black/15 p-4 text-center" style="border-left:4px solid #a16207">
+      <div id="stat-menunggu" class="font-display-lg text-3xl text-ink-black leading-none">0</div>
+      <div class="font-label-sm text-xs uppercase tracking-widest text-ink-black/40 mt-1">Menunggu</div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="reveal overflow-x-auto border border-ink-black/15 mb-16">
+    <table class="w-full border-collapse min-w-[600px]">
+      <thead>
+        <tr style="background:#0D0D0D">
+          <th class="font-label-sm text-[10px] uppercase tracking-widest text-white/60 text-left px-5 py-4">No. Daftar</th>
+          <th class="font-label-sm text-[10px] uppercase tracking-widest text-white/60 text-left px-5 py-4">Nama Siswa</th>
+          <th class="font-label-sm text-[10px] uppercase tracking-widest text-white/60 text-left px-5 py-4 col-hide-mobile">Jenjang / Pilihan</th>
+          <th class="font-label-sm text-[10px] uppercase tracking-widest text-white/60 text-left px-5 py-4 col-hide-mobile">Tanggal Daftar</th>
+          <th class="font-label-sm text-[10px] uppercase tracking-widest text-white/60 text-left px-5 py-4">Status</th>
+          <th class="font-label-sm text-[10px] uppercase tracking-widest text-white/60 text-left px-5 py-4 col-hide-mobile admin-col" style="display:none">Ubah Status</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <!-- rows injected by JS -->
+      </tbody>
+    </table>
+    <!-- Empty state -->
+    <div id="empty-state" class="py-24 text-center hidden">
+      <span class="material-symbols-outlined text-5xl text-ink-black/20 mb-4 block">inbox</span>
+      <p class="font-display-lg text-2xl text-ink-black/30 mb-2">Belum ada data</p>
+      <p class="font-body-md text-ink-black/40 text-sm">Belum ada siswa yang mendaftar, atau tidak ada hasil yang sesuai pencarian Anda.</p>
+      <a href="ppdb.html" class="inline-block mt-6 bg-crimson-heritage text-white font-label-sm uppercase tracking-widest text-xs px-6 py-3 hover:bg-ink-black transition-colors duration-300">Daftar Sekarang</a>
+    </div>
+    <!-- No results state -->
+    <div id="no-results" class="py-20 text-center hidden">
+      <span class="material-symbols-outlined text-4xl text-ink-black/20 mb-3 block">manage_search</span>
+      <p class="font-body-md text-ink-black/40 text-sm">Tidak ditemukan data yang sesuai.</p>
+    </div>
+  </div>
+
+  <!-- Admin Panel Toggle -->
+  <div class="reveal border-t border-ink-black/10 pt-10">
+    <div class="flex items-center gap-4 mb-4">
+      <span class="material-symbols-outlined text-ink-black/30 text-lg">admin_panel_settings</span>
+      <button onclick="toggleAdmin()" class="font-label-sm uppercase tracking-widest text-xs text-ink-black/40 hover:text-crimson-heritage transition-colors">
+        Panel Admin
+      </button>
+      <span class="font-label-sm text-xs text-ink-black/25">— Hanya untuk petugas sekolah</span>
+    </div>
+
+    <div id="admin-panel" class="border border-ink-black/15 p-8" style="border-left:4px solid #A50000">
+      <div class="mb-4">
+        <p class="font-label-sm uppercase tracking-widest text-crimson-heritage text-xs mb-1">Mode Admin</p>
+        <p class="font-body-md text-ink-black/60 text-sm">Klik tombol status di tabel di atas untuk mengubah status kelulusan siswa. Perubahan disimpan secara lokal di browser.</p>
+      </div>
+      <div class="flex flex-wrap gap-3 mt-4">
+        <button onclick="addDemoData()" class="border border-ink-black/20 px-4 py-2 font-label-sm uppercase tracking-widest text-xs text-ink-black/60 hover:border-crimson-heritage hover:text-crimson-heritage transition-colors">
+          + Tambah Data Demo
+        </button>
+        <button onclick="clearAllData()" class="border border-red-200 px-4 py-2 font-label-sm uppercase tracking-widest text-xs text-red-400 hover:bg-red-50 transition-colors">
+          Hapus Semua Data
+        </button>
+      </div>
+      <p class="font-label-sm text-xs text-ink-black/30 mt-4">Data tersimpan di <code class="bg-ink-black/5 px-1 py-0.5 rounded text-ink-black/50">localStorage</code> browser ini.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="bg-electric-midnight text-canvas-off-white py-10 px-6 md:px-margin-edge flex flex-col md:flex-row justify-between items-center gap-4 border-t-4 border-crimson-heritage">
+  <div class="flex items-center gap-4">
+    <span class="font-display-lg italic text-3xl text-crimson-heritage">IGS</span>
+    <div>
+      <p class="font-label-sm text-xs uppercase tracking-widest text-white/50">Ignatius Global School</p>
+      <p class="font-label-sm text-xs text-white/30 mt-0.5">Pengumuman Kelulusan PPDB</p>
+    </div>
+  </div>
+  <a href="index.html" class="font-label-sm text-xs uppercase tracking-widest text-white/40 hover:text-white transition-colors flex items-center gap-2">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Kembali ke Beranda
+  </a>
+  <p class="font-label-sm text-xs text-white/20 uppercase tracking-widest">© 2025 IGS — Crafted by Wilbert · Claude AI</p>
+</footer>
+
+<!-- Back to top -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 right-6 z-50 w-12 h-12 bg-crimson-heritage flex items-center justify-center text-white shadow-lg hover:bg-ink-black transition-colors duration-300">
+  <span class="material-symbols-outlined text-xl">arrow_upward</span>
+</button>
+
+<script>
+/* ── Cursor ── */
+const dot  = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+
+/* ── Navbar scroll ── */
+const header=document.getElementById('header');
+window.addEventListener('scroll',()=>{
+  header.classList.toggle('scrolled',window.scrollY>80);
+  document.getElementById('back-top').classList.toggle('show',window.scrollY>400);
+});
+
+/* ── Scroll reveal ── */
+function initReveal(){
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);obs.unobserve(e.target);}});
+  },{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+window.addEventListener('load',initReveal);
+if(document.readyState==='complete')initReveal();
+
+/* ── Mobile nav ── */
+const mNav=document.getElementById('mobile-nav');
+const bd=document.getElementById('mobile-backdrop');
+new MutationObserver(()=>{const o=mNav.classList.contains('open');bd.style.opacity=o?'1':'0';bd.style.pointerEvents=o?'auto':'none';}).observe(mNav,{attributes:true,attributeFilter:['class']});
+
+/* ── Admin mode ── */
+let adminOpen = false;
+function toggleAdmin(){
+  adminOpen=!adminOpen;
+  const panel=document.getElementById('admin-panel');
+  panel.classList.toggle('open',adminOpen);
+  // Show/hide "Ubah Status" column header
+  document.querySelectorAll('.admin-col').forEach(el=>el.style.display=adminOpen?'':'none');
+  renderTable();
+}
+
+/* ── Data helpers ── */
+function getData(){ try{return JSON.parse(localStorage.getItem('igs_ppdb_data')||'[]');}catch{return[];} }
+function setData(d){ localStorage.setItem('igs_ppdb_data',JSON.stringify(d)); }
+
+function updateStatus(id, status){
+  const data=getData();
+  const idx=data.findIndex(s=>s.id===id);
+  if(idx>-1){ data[idx].status=status; setData(data); renderTable(); updateStats(); }
+}
+
+/* ── Stats ── */
+function updateStats(){
+  const data=getData();
+  document.getElementById('stat-lulus').textContent=data.filter(s=>s.status==='Lulus').length;
+  document.getElementById('stat-tidak').textContent=data.filter(s=>s.status==='Tidak Lulus').length;
+  document.getElementById('stat-menunggu').textContent=data.filter(s=>s.status==='Menunggu').length;
+}
+
+/* ── Badge HTML ── */
+function badgeHTML(status){
+  if(status==='Lulus') return `<span class="badge-lulus font-label-sm text-xs px-3 py-1 rounded-full inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 20">check_circle</span>Lulus</span>`;
+  if(status==='Tidak Lulus') return `<span class="badge-tidak font-label-sm text-xs px-3 py-1 rounded-full inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 20">cancel</span>Tidak Lulus</span>`;
+  return `<span class="badge-menunggu font-label-sm text-xs px-3 py-1 rounded-full inline-flex items-center gap-1"><span class="material-symbols-outlined text-sm">hourglass_empty</span>Menunggu</span>`;
+}
+
+/* ── Admin status changer ── */
+function statusSelectHTML(siswa){
+  return `<select onchange="updateStatus('${siswa.id}',this.value)"
+    class="bg-transparent border border-ink-black/20 text-xs font-label-sm px-2 py-1 outline-none cursor-pointer rounded"
+    style="min-width:130px">
+    <option ${siswa.status==='Menunggu'?'selected':''}>Menunggu</option>
+    <option ${siswa.status==='Lulus'?'selected':''}>Lulus</option>
+    <option ${siswa.status==='Tidak Lulus'?'selected':''}>Tidak Lulus</option>
+  </select>`;
+}
+
+/* ── Render table ── */
+let filteredData = [];
+
+function filterTable(){
+  const q=(document.getElementById('search-input').value||'').toLowerCase();
+  const st=document.getElementById('filter-status').value;
+  const jj=document.getElementById('filter-jenjang').value;
+  const data=getData();
+
+  filteredData=data.filter(s=>{
+    const matchQ=!q||(s.nama.toLowerCase().includes(q))||s.id.toLowerCase().includes(q);
+    const matchSt=!st||s.status===st;
+    const matchJj=!jj||s.pilihan===jj;
+    return matchQ&&matchSt&&matchJj;
+  });
+  renderTable();
+}
+
+function renderTable(){
+  const tbody=document.getElementById('table-body');
+  const empty=document.getElementById('empty-state');
+  const noResults=document.getElementById('no-results');
+  const allData=getData();
+
+  if(allData.length===0){
+    tbody.innerHTML='';
+    empty.classList.remove('hidden');
+    noResults.classList.add('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  // If filteredData not yet initialized, show all
+  const toShow = filteredData.length>=0 && document.getElementById('search-input').value==='' && document.getElementById('filter-status').value==='' && document.getElementById('filter-jenjang').value==='' ? allData : filteredData;
+
+  if(toShow.length===0){
+    tbody.innerHTML='';
+    noResults.classList.remove('hidden');
+    return;
+  }
+  noResults.classList.add('hidden');
+
+  tbody.innerHTML=toShow.map((s,i)=>`
+    <tr class="trow border-b border-ink-black/8 row-anim" style="animation-delay:${i*40}ms">
+      <td class="px-5 py-4 font-label-sm text-xs text-crimson-heritage tracking-wider whitespace-nowrap">${s.id}</td>
+      <td class="px-5 py-4">
+        <div class="font-body-md font-semibold text-ink-black text-sm">${s.nama}</div>
+        <div class="font-label-sm text-[10px] uppercase tracking-widest text-ink-black/40 mt-0.5">${s.jenis_kelamin||''} ${s.tempat_lahir ? '· '+s.tempat_lahir : ''}</div>
+      </td>
+      <td class="px-5 py-4 col-hide-mobile">
+        <div class="font-body-md text-sm text-ink-black">${s.pilihan||'-'}</div>
+        <div class="font-label-sm text-[10px] uppercase tracking-widest text-ink-black/40 mt-0.5">${s.jenis_pendaftaran||''} · ${s.jalur||''}</div>
+      </td>
+      <td class="px-5 py-4 col-hide-mobile font-label-sm text-xs text-ink-black/50 whitespace-nowrap">${s.tanggal_daftar||'-'}</td>
+      <td class="px-5 py-4 whitespace-nowrap">${badgeHTML(s.status||'Menunggu')}</td>
+      <td class="px-5 py-4 admin-col" style="display:${adminOpen?'':'none'}">${statusSelectHTML(s)}</td>
+    </tr>
+  `).join('');
+}
+
+/* ── Add demo data ── */
+function addDemoData(){
+  const names=[
+    {nama:'Andhika Pratama Santoso',jk:'Laki-laki',kota:'Pekanbaru',pilihan:'SMA IPA',status:'Lulus'},
+    {nama:'Siti Rahma Dewi',jk:'Perempuan',kota:'Dumai',pilihan:'SMA IPS',status:'Lulus'},
+    {nama:'Kevin Alexandro Wijaya',jk:'Laki-laki',kota:'Pekanbaru',pilihan:'SMP',status:'Menunggu'},
+    {nama:'Putri Handayani',jk:'Perempuan',kota:'Bangkinang',pilihan:'SMA IPA',status:'Tidak Lulus'},
+    {nama:'Muhammad Rizky Fauzan',jk:'Laki-laki',kota:'Pekanbaru',pilihan:'SMA IPS',status:'Lulus'},
+  ];
+  const existing=getData();
+  names.forEach((n,i)=>{
+    const id='IGS-DEMO'+(i+1);
+    if(!existing.find(e=>e.id===id)){
+      existing.push({
+        id,nama:n.nama,jenis_kelamin:n.jk,tempat_lahir:n.kota,tanggal_lahir:'2007-01-01',
+        jenis_pendaftaran:'Baru',jalur:'TA 2021 / 2022',pilihan:n.pilihan,
+        sekolah_asal:'SMP Negeri '+((i+1)*3),
+        tanggal_daftar:new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'}),
+        status:n.status,nisn:'999'+i
+      });
+    }
+  });
+  setData(existing);
+  filterTable();
+  updateStats();
+}
+
+/* ── Clear all ── */
+function clearAllData(){
+  if(confirm('Hapus semua data pendaftaran? Tindakan ini tidak dapat dibatalkan.')){
+    localStorage.removeItem('igs_ppdb_data');
+    filteredData=[];
+    filterTable();
+    updateStats();
+  }
+}
+
+/* ── Init ── */
+filteredData=getData();
+filterTable();
+updateStats();
+
+/* Highlight most recent registration if came from ppdb form */
+(function highlightNewest(){
+  const data = getData();
+  if (!data.length) return;
+  // Store the newest ID we showed so we only highlight once per load
+  const newest = data[data.length - 1];
+  if (!newest) return;
+  // Wait for table to render
+  setTimeout(() => {
+    const rows = document.querySelectorAll('#table-body tr');
+    rows.forEach(row => {
+      const idCell = row.querySelector('td:first-child');
+      if (idCell && idCell.textContent.trim() === newest.id) {
+        row.classList.add('row-new');
+      }
+    });
+  }, 300);
+})();
+</script>
+</body>
+</html>
