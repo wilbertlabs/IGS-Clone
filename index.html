@@ -223,9 +223,16 @@
   /* ── HERO CAROUSEL: tinggi aman di semua device ── */
   @media (max-width: 639px) {
     #banner-carousel {
-      height: 100svh !important;
-      min-height: 480px !important;
+      height: 56vw !important;
+      min-height: 260px !important;
+      max-height: 480px !important;
       margin-top: 60px !important;
+      aspect-ratio: unset !important;
+    }
+    #banner-carousel .carousel-slide img,
+    #banner-carousel .carousel-slide video {
+      object-fit: cover !important;
+      object-position: center center !important;
     }
     #slide-counter              { bottom: 52px; right: 14px; font-size: 10px; }
     #carousel-prev              { width: 36px !important; height: 36px !important; left: 8px !important; }
@@ -235,7 +242,17 @@
     #video-playpause            { left: 14px !important; bottom: 44px !important; }
   }
   @media (min-width: 640px) and (max-width: 1023px) {
-    #banner-carousel { margin-top: 66px !important; }
+    #banner-carousel {
+      margin-top: 66px !important;
+      height: 56vw !important;
+      min-height: 340px !important;
+      aspect-ratio: unset !important;
+    }
+    #banner-carousel .carousel-slide img,
+    #banner-carousel .carousel-slide video {
+      object-fit: cover !important;
+      object-position: center center !important;
+    }
   }
 
   /* ── LANGUAGE SECTION: fix absolute overflow → grid pada mobile/tablet ── */
@@ -253,7 +270,7 @@
       overflow: visible !important;
     }
 
-    /* Grid 2 kolom */
+    /* Grid 2 kolom untuk 6 guru */
     #bahasa-teachers,
     #bahasa .absolute.inset-0.flex.items-center.justify-around {
       position: static !important;
@@ -283,7 +300,7 @@
     #bahasa .lang-card p  { font-size: 10px !important; margin-top: 4px !important; }
   }
 
-  /* Tablet: 4 kolom tapi foto lebih kecil, marquee dikecilkan */
+  /* Tablet: 3 kolom untuk 6 guru */
   @media (min-width: 768px) and (max-width: 1023px) {
     /* Marquee font lebih kecil agar tidak overflow */
     #bahasa .marquee-container span { font-size: 110px !important; }
@@ -292,8 +309,21 @@
     #bahasa .lang-card .lang-photo { width: 120px !important; height: 162px !important; }
     #bahasa .lang-card h3          { font-size: 1.5rem !important; }
 
-    /* Kurangi stagger agar tidak terpotong bawah */
-    #bahasa .lang-card.mt-24 { margin-top: 48px !important; }
+    /* Grid 3 kolom untuk 6 guru */
+    #bahasa-teachers {
+      position: static !important;
+      inset: auto !important;
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 32px 24px !important;
+      padding: 0 32px 32px !important;
+      justify-items: center !important;
+      align-items: start !important;
+    }
+
+    /* Reset stagger margin */
+    #bahasa .lang-card.mt-24,
+    #bahasa-teachers .lang-card { margin-top: 0 !important; }
   }
 
   /* ── Navbar base ── */
@@ -765,11 +795,6 @@
     <div id="carousel-autoplay-bar" class="h-full bg-crimson-heritage" style="width:0%;transition:width linear"></div>
   </div>
 
-  <!-- ── Tanda media jenis slide ── -->
-  <div id="media-badge" class="absolute bottom-16 right-8 md:right-16 z-30 flex items-center gap-1 font-label-sm text-white/50 text-[10px] uppercase tracking-widest">
-    <span class="material-symbols-outlined text-sm" id="media-badge-icon">image</span>
-    <span id="media-badge-label">Foto</span>
-  </div>
 
 </section>
 
@@ -780,8 +805,6 @@
   const DOTS   = document.querySelectorAll('.carousel-dot');
   const counter    = document.getElementById('slide-counter');
   const bar        = document.getElementById('carousel-autoplay-bar');
-  const badgeIcon  = document.getElementById('media-badge-icon');
-  const badgeLabel = document.getElementById('media-badge-label');
   const playPauseBtn  = document.getElementById('video-playpause');
   const playPauseIcon = document.getElementById('video-playpause-icon');
   const TOTAL    = SLIDES.length;
@@ -836,8 +859,6 @@
       // Jika sedang di slide ini, lanjut dengan timer gambar
       if(current === index){
         playPauseBtn.style.display = 'none';
-        badgeIcon.textContent = 'image';
-        badgeLabel.textContent = 'Foto';
         startBarForDuration(DURATION);
         autoTimer = setTimeout(()=>{ goTo(current + 1); }, DURATION);
       }
@@ -890,8 +911,6 @@
 
     if(mType === 'video' && newVideo && isPlayableVideo(current)){
       // ══ SLIDE VIDEO ══
-      badgeIcon.textContent = 'play_circle';
-      badgeLabel.textContent = 'Video';
       playPauseBtn.style.display = 'flex';
       playPauseIcon.textContent = 'pause';
 
@@ -919,8 +938,6 @@
 
     } else {
       // ══ SLIDE GAMBAR ══
-      badgeIcon.textContent = 'image';
-      badgeLabel.textContent = 'Foto';
       playPauseBtn.style.display = 'none';
 
       startBarForDuration(DURATION);
@@ -1008,27 +1025,57 @@
   </div>
   <div class="relative" id="bahasa-media-wrap">
     <!-- Marquee bg — hanya visible di desktop -->
-    <div class="marquee-container hidden md:flex" style="opacity:.03">
-      <span class="font-display-xl uppercase mx-12" style="font-size:220px;white-space:nowrap">English 日本語 中文 Français</span>
-      <span class="font-display-xl uppercase mx-12" style="font-size:220px;white-space:nowrap">English 日本語 中文 Français</span>
+    <div class="marquee-container hidden md:flex" style="opacity:.03;min-height:700px">
+      <span class="font-display-xl uppercase mx-12" style="font-size:220px;white-space:nowrap">Deutsch 日本語 中文 Français Coding</span>
+      <span class="font-display-xl uppercase mx-12" style="font-size:220px;white-space:nowrap">Deutsch 日本語 中文 Français Coding</span>
     </div>
     <!-- Teachers -->
-    <div id="bahasa-teachers" class="absolute inset-0 flex items-center justify-around px-margin-edge md:absolute md:inset-0 md:flex md:items-center md:justify-around md:px-margin-edge">
-      <!-- Teacher 1 — top -->
-      <div class="lang-card flex flex-col items-center space-y-4 cursor-pointer" style="align-self:flex-start;margin-top:40px">
-        <div class="lang-photo w-44 h-60 overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border-2 border-transparent">
-          <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLbMD80VcJapHYPM79cxvYzlrwCBqNT95VYQOB0m7Mhw2yNnkyVB8kTbxldrYG9QbqAVQb3K0mXlLFkwZ14hP9sds_fhryJeMfKX501UvXeDLoraUiROGXFDiGetTt-RX7wKDGmM6u38IbmYmA2uTDr1PajjIWbOf2QyNNJTi_aOqHsFpFD35Sc54qP_VLd1eAjl3fnQUGGZjWaCAptnhCytKzeL2Bp2ps-dWVGcLiRLyz3ZVmJyW489p_1diF6BXweefttTGT7vxO" alt="English Teacher"/>
+    <div id="bahasa-teachers" class="absolute inset-0 flex flex-wrap items-center justify-around px-margin-edge md:absolute md:inset-0 md:flex md:flex-wrap md:items-center md:justify-around md:px-margin-edge" style="gap:0 16px">
+      <!-- Teacher 1 — top (Deutsch) -->
+      <div class="lang-card flex flex-col items-center space-y-4 cursor-pointer" style="align-self:flex-start;margin-top:40px"
+        onclick="openGuruBahasaModal(this)"
+        data-foto="https://lh3.googleusercontent.com/aida-public/AB6AXuBjRtd1tvWrwio8uMp86m71KgZ08xgvDxf3eB-vJjQvHOBG-8UbglTFqajLc0Htvq-0xtyw6yIx3heALLGlR8ooHcwhujQYt0BpKBcf_GTxvkmpJ2Y045CAmsOAxM6DurmKeEpIkor5D1nYGeBKjRsxWXdvOhj90nKTpE3NX0Ceb7ukpnSfmg9e8o4yhaHcOudzdyqksiI_h_BZZfAtjipWDVWusR_S7UvusXy3EWGsnRMf6-cShNlDq2BzgC30N7XhLOzalHV3NPDp"
+        data-nama="Frau Anna Becker"
+        data-bahasa="Deutsch"
+        data-flag="🇩🇪"
+        data-asal="Berlin, Jerman"
+        data-ttl="Hamburg, 14 Maret 1982"
+        data-pendidikan="M.A. Germanistik — Humboldt-Universität zu Berlin"
+        data-pengalaman="12 Tahun"
+        data-spesialisasi="Percakapan Sehari-hari, Tata Bahasa, Sastra Jerman"
+        data-sertifikasi="Goethe-Institut Zertifikat C2 · TestDaF Instructor"
+        data-motto="Sprache ist die Seele einer Nation — Bahasa adalah jiwa sebuah bangsa.">
+        <div class="lang-photo w-44 h-60 overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border-2 border-transparent relative">
+          <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjRtd1tvWrwio8uMp86m71KgZ08xgvDxf3eB-vJjQvHOBG-8UbglTFqajLc0Htvq-0xtyw6yIx3heALLGlR8ooHcwhujQYt0BpKBcf_GTxvkmpJ2Y045CAmsOAxM6DurmKeEpIkor5D1nYGeBKjRsxWXdvOhj90nKTpE3NX0Ceb7ukpnSfmg9e8o4yhaHcOudzdyqksiI_h_BZZfAtjipWDVWusR_S7UvusXy3EWGsnRMf6-cShNlDq2BzgC30N7XhLOzalHV3NPDp" alt="German Teacher"/>
+          <div class="guru-bahasa-hint absolute inset-0 flex items-center justify-center bg-ink-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300">
+            <span class="font-label-sm text-white text-[10px] uppercase tracking-widest">Lihat Profil</span>
+          </div>
         </div>
         <div class="text-center">
-          <h3 class="font-display-lg text-3xl uppercase tracking-tighter">English</h3>
-          <p class="font-label-sm text-ink-black/50 mt-1">Mr. James Hartley</p>
+          <h3 class="font-display-lg text-3xl uppercase tracking-tighter">Deutsch</h3>
+          <p class="font-label-sm text-ink-black/50 mt-1">Frau Anna Becker</p>
           <span class="lang-underline mt-2"></span>
         </div>
       </div>
       <!-- Teacher 2 — bottom (stagger) -->
-      <div class="lang-card flex flex-col items-center space-y-4 cursor-pointer mt-24">
-        <div class="lang-photo w-44 h-60 overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border-2 border-transparent">
+      <div class="lang-card flex flex-col items-center space-y-4 cursor-pointer mt-24"
+        onclick="openGuruBahasaModal(this)"
+        data-foto="https://lh3.googleusercontent.com/aida-public/AB6AXuCeFRjewtrwvndZn-yTBZN5lGJq3Qc_XQhWQBkJsw8HoJsu9Og3NnU_5McXId-DkdWsX0UcUFbt-1q3MQQz9luOwMQsxkkjh6-fZ7547Bz_0eyZnkV0zpKxDot_DuLn7zhFV33NckWeUOhmQs6cvax2RVBHYfiIqEWQVRH9b3xDuWtJKZ96KDoILNke4fSP62tN8Uy2NGbk444SKe6Y_OCucG4kJy1zAMAqV2hk0YQaOVMAV-Sta8eNCrSEwmoJHmpoYK_ibwrImaSl"
+        data-nama="Ms. Yuki Tanaka"
+        data-bahasa="日本語"
+        data-flag="🇯🇵"
+        data-asal="Kyoto, Jepang"
+        data-ttl="Osaka, 27 Juli 1988"
+        data-pendidikan="M.Ed. Pendidikan Bahasa — Waseda University, Tokyo"
+        data-pengalaman="9 Tahun"
+        data-spesialisasi="Hiragana, Katakana, Kanji Dasar, Budaya Jepang"
+        data-sertifikasi="JLPT N1 · JEES Japanese Teaching Certificate"
+        data-motto="言語は文化への扉です — Bahasa adalah pintu menuju budaya.">
+        <div class="lang-photo w-44 h-60 overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border-2 border-transparent relative">
           <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeFRjewtrwvndZn-yTBZN5lGJq3Qc_XQhWQBkJsw8HoJsu9Og3NnU_5McXId-DkdWsX0UcUFbt-1q3MQQz9luOwMQsxkkjh6-fZ7547Bz_0eyZnkV0zpKxDot_DuLn7zhFV33NckWeUOhmQs6cvax2RVBHYfiIqEWQVRH9b3xDuWtJKZ96KDoILNke4fSP62tN8Uy2NGbk444SKe6Y_OCucG4kJy1zAMAqV2hk0YQaOVMAV-Sta8eNCrSEwmoJHmpoYK_ibwrImaSl" alt="Japanese Teacher"/>
+          <div class="guru-bahasa-hint absolute inset-0 flex items-center justify-center bg-ink-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300">
+            <span class="font-label-sm text-white text-[10px] uppercase tracking-widest">Lihat Profil</span>
+          </div>
         </div>
         <div class="text-center">
           <h3 class="font-display-lg text-3xl uppercase tracking-tighter">日本語</h3>
@@ -1037,9 +1084,24 @@
         </div>
       </div>
       <!-- Teacher 3 — top -->
-      <div class="lang-card flex flex-col items-center space-y-4 cursor-pointer" style="align-self:flex-start;margin-top:40px">
-        <div class="lang-photo w-44 h-60 overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border-2 border-transparent">
+      <div class="lang-card flex flex-col items-center space-y-4 cursor-pointer" style="align-self:flex-start;margin-top:40px"
+        onclick="openGuruBahasaModal(this)"
+        data-foto="https://lh3.googleusercontent.com/aida-public/AB6AXuBjRtd1tvWrwio8uMp86m71KgZ08xgvDxf3eB-vJjQvHOBG-8UbglTFqajLc0Htvq-0xtyw6yIx3heALLGlR8ooHcwhujQYt0BpKBcf_GTxvkmpJ2Y045CAmsOAxM6DurmKeEpIkor5D1nYGeBKjRsxWXdvOhj90nKTpE3NX0Ceb7ukpnSfmg9e8o4yhaHcOudzdyqksiI_h_BZZfAtjipWDVWusR_S7UvusXy3EWGsnRMf6-cShNlDq2BzgC30N7XhLOzalHV3NPDp"
+        data-nama="Mme. Claire Dupont"
+        data-bahasa="Français"
+        data-flag="🇫🇷"
+        data-asal="Lyon, Prancis"
+        data-ttl="Paris, 3 November 1985"
+        data-pendidikan="Master FLE — Université Sorbonne Nouvelle, Paris"
+        data-pengalaman="11 Tahun"
+        data-spesialisasi="Français Academique, Conversation, Sastra Klasik"
+        data-sertifikasi="DALF C2 · Alliance Française Instructor"
+        data-motto="Une langue, c'est une vision du monde — Sebuah bahasa adalah cara memandang dunia.">
+        <div class="lang-photo w-44 h-60 overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border-2 border-transparent relative">
           <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjRtd1tvWrwio8uMp86m71KgZ08xgvDxf3eB-vJjQvHOBG-8UbglTFqajLc0Htvq-0xtyw6yIx3heALLGlR8ooHcwhujQYt0BpKBcf_GTxvkmpJ2Y045CAmsOAxM6DurmKeEpIkor5D1nYGeBKjRsxWXdvOhj90nKTpE3NX0Ceb7ukpnSfmg9e8o4yhaHcOudzdyqksiI_h_BZZfAtjipWDVWusR_S7UvusXy3EWGsnRMf6-cShNlDq2BzgC30N7XhLOzalHV3NPDp" alt="French Teacher"/>
+          <div class="guru-bahasa-hint absolute inset-0 flex items-center justify-center bg-ink-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300">
+            <span class="font-label-sm text-white text-[10px] uppercase tracking-widest">Lihat Profil</span>
+          </div>
         </div>
         <div class="text-center">
           <h3 class="font-display-lg text-3xl uppercase tracking-tighter">Français</h3>
@@ -1048,9 +1110,24 @@
         </div>
       </div>
       <!-- Teacher 4 — bottom (stagger) -->
-      <div class="lang-card flex flex-col items-center space-y-4 cursor-pointer mt-24">
-        <div class="lang-photo w-44 h-60 overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border-2 border-transparent">
+      <div class="lang-card flex flex-col items-center space-y-4 cursor-pointer mt-24"
+        onclick="openGuruBahasaModal(this)"
+        data-foto="https://lh3.googleusercontent.com/aida-public/AB6AXuDLbMD80VcJapHYPM79cxvYzlrwCBqNT95VYQOB0m7Mhw2yNnkyVB8kTbxldrYG9QbqAVQb3K0mXlLFkwZ14hP9sds_fhryJeMfKX501UvXeDLoraUiROGXFDiGetTt-RX7wKDGmM6u38IbmYmA2uTDr1PajjIWbOf2QyNNJTi_aOqHsFpFD35Sc54qP_VLd1eAjl3fnQUGGZjWaCAptnhCytKzeL2Bp2ps-dWVGcLiRLyz3ZVmJyW489p_1diF6BXweefttTGT7vxO"
+        data-nama="Mr. Wei Liang"
+        data-bahasa="中文"
+        data-flag="🇨🇳"
+        data-asal="Shanghai, Tiongkok"
+        data-ttl="Beijing, 19 Mei 1984"
+        data-pendidikan="M.A. Linguistik Terapan — Peking University"
+        data-pengalaman="10 Tahun"
+        data-spesialisasi="Mandarin HSK, Karakter Han, Budaya Tiongkok"
+        data-sertifikasi="HSK 6 · CTCSOL International Chinese Teacher"
+        data-motto="学无止境 — Belajar itu tiada batas.">
+        <div class="lang-photo w-44 h-60 overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border-2 border-transparent relative">
           <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLbMD80VcJapHYPM79cxvYzlrwCBqNT95VYQOB0m7Mhw2yNnkyVB8kTbxldrYG9QbqAVQb3K0mXlLFkwZ14hP9sds_fhryJeMfKX501UvXeDLoraUiROGXFDiGetTt-RX7wKDGmM6u38IbmYmA2uTDr1PajjIWbOf2QyNNJTi_aOqHsFpFD35Sc54qP_VLd1eAjl3fnQUGGZjWaCAptnhCytKzeL2Bp2ps-dWVGcLiRLyz3ZVmJyW489p_1diF6BXweefttTGT7vxO" alt="Mandarin Teacher"/>
+          <div class="guru-bahasa-hint absolute inset-0 flex items-center justify-center bg-ink-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300">
+            <span class="font-label-sm text-white text-[10px] uppercase tracking-widest">Lihat Profil</span>
+          </div>
         </div>
         <div class="text-center">
           <h3 class="font-display-lg text-3xl uppercase tracking-tighter">中文</h3>
@@ -1058,9 +1135,201 @@
           <span class="lang-underline mt-2"></span>
         </div>
       </div>
+      <!-- Teacher 5 — top (Coding) -->
+      <div class="lang-card flex flex-col items-center space-y-4 cursor-pointer" style="align-self:flex-start;margin-top:40px"
+        onclick="openGuruBahasaModal(this)"
+        data-foto="https://lh3.googleusercontent.com/aida-public/AB6AXuCeFRjewtrwvndZn-yTBZN5lGJq3Qc_XQhWQBkJsw8HoJsu9Og3NnU_5McXId-DkdWsX0UcUFbt-1q3MQQz9luOwMQsxkkjh6-fZ7547Bz_0eyZnkV0zpKxDot_DuLn7zhFV33NckWeUOhmQs6cvax2RVBHYfiIqEWQVRH9b3xDuWtJKZ96KDoILNke4fSP62tN8Uy2NGbk444SKe6Y_OCucG4kJy1zAMAqV2hk0YQaOVMAV-Sta8eNCrSEwmoJHmpoYK_ibwrImaSl"
+        data-nama="Mr. Ryan Mitchell"
+        data-bahasa="Coding"
+        data-flag="💻"
+        data-asal="San Francisco, Amerika Serikat"
+        data-ttl="Seattle, 8 Januari 1990"
+        data-pendidikan="M.Sc. Computer Science — Stanford University"
+        data-pengalaman="8 Tahun"
+        data-spesialisasi="Python, Web Development, Algoritma & Logika Pemrograman"
+        data-sertifikasi="Google Certified Educator · AWS Certified Developer"
+        data-motto="Code is poetry — Kode adalah puisi.">
+        <div class="lang-photo w-44 h-60 overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border-2 border-transparent relative">
+          <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeFRjewtrwvndZn-yTBZN5lGJq3Qc_XQhWQBkJsw8HoJsu9Og3NnU_5McXId-DkdWsX0UcUFbt-1q3MQQz9luOwMQsxkkjh6-fZ7547Bz_0eyZnkV0zpKxDot_DuLn7zhFV33NckWeUOhmQs6cvax2RVBHYfiIqEWQVRH9b3xDuWtJKZ96KDoILNke4fSP62tN8Uy2NGbk444SKe6Y_OCucG4kJy1zAMAqV2hk0YQaOVMAV-Sta8eNCrSEwmoJHmpoYK_ibwrImaSl" alt="Coding Teacher"/>
+          <div class="guru-bahasa-hint absolute inset-0 flex items-center justify-center bg-ink-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300">
+            <span class="font-label-sm text-white text-[10px] uppercase tracking-widest">Lihat Profil</span>
+          </div>
+        </div>
+        <div class="text-center">
+          <h3 class="font-display-lg text-3xl uppercase tracking-tighter">Coding</h3>
+          <p class="font-label-sm text-ink-black/50 mt-1">Mr. Ryan Mitchell</p>
+          <span class="lang-underline mt-2"></span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- ═══════════════════ GURU BAHASA MODAL ═══════════════════ -->
+<div id="guru-bahasa-modal" role="dialog" aria-modal="true" aria-labelledby="gbm-nama">
+
+  <!-- Backdrop -->
+  <div id="guru-bahasa-backdrop" onclick="closeGuruBahasaModal()"></div>
+
+  <!-- Box -->
+  <div id="guru-bahasa-box">
+
+    <!-- Close btn -->
+    <button id="guru-bahasa-close" onclick="closeGuruBahasaModal()" aria-label="Tutup">
+      <span class="material-symbols-outlined" style="font-size:20px">close</span>
+    </button>
+
+    <!-- Top: foto + info utama -->
+    <div class="flex flex-col md:flex-row" style="min-height:0;flex:1;overflow:hidden">
+
+      <!-- Foto -->
+      <div class="flex-shrink-0 w-full md:w-60 lg:w-72 relative overflow-hidden" style="min-height:280px">
+        <img id="gbm-foto" src="" alt="" class="absolute inset-0 w-full h-full object-cover object-top"/>
+        <!-- Crimson corner ribbon -->
+        <div class="absolute top-0 right-0 w-0 h-0" style="border-style:solid;border-width:0 52px 52px 0;border-color:transparent #A50000 transparent transparent;z-index:5"></div>
+        <!-- Language flag badge -->
+        <span id="gbm-badge" class="absolute top-4 left-4 z-10 font-label-sm text-[9px] uppercase tracking-widest px-3 py-1 text-white" style="background:#A50000"></span>
+      </div>
+
+      <!-- Info -->
+      <div class="flex-1 flex flex-col justify-between p-7 md:p-8 overflow-y-auto" style="min-height:0">
+
+        <div>
+          <!-- Label mata pelajaran -->
+          <p id="gbm-label" class="font-label-sm text-crimson-heritage uppercase text-[10px] tracking-widest mb-2"></p>
+          <!-- Nama -->
+          <h2 id="gbm-nama" class="font-display-lg text-2xl md:text-3xl uppercase tracking-tight text-ink-black leading-tight mb-1"></h2>
+          <!-- Asal -->
+          <p id="gbm-asal" class="font-label-sm text-electric-midnight uppercase text-[11px] tracking-widest mb-6"></p>
+
+          <!-- Grid detail -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+
+            <div class="border-l-2 border-crimson-heritage pl-3">
+              <p class="font-label-sm text-ink-black/40 uppercase text-[9px] tracking-widest mb-1">Tempat, Tanggal Lahir</p>
+              <p id="gbm-ttl" class="font-label-sm text-ink-black text-sm font-semibold tracking-wide"></p>
+            </div>
+
+            <div class="border-l-2 border-crimson-heritage pl-3">
+              <p class="font-label-sm text-ink-black/40 uppercase text-[9px] tracking-widest mb-1">Pengalaman Mengajar</p>
+              <p id="gbm-pengalaman" class="font-label-sm text-ink-black text-sm font-semibold tracking-wide"></p>
+            </div>
+
+            <div class="border-l-2 border-crimson-heritage pl-3 sm:col-span-2">
+              <p class="font-label-sm text-ink-black/40 uppercase text-[9px] tracking-widest mb-1">Pendidikan</p>
+              <p id="gbm-pendidikan" class="font-label-sm text-ink-black text-sm font-semibold tracking-wide"></p>
+            </div>
+
+            <div class="border-l-2 border-crimson-heritage pl-3 sm:col-span-2">
+              <p class="font-label-sm text-ink-black/40 uppercase text-[9px] tracking-widest mb-1">Spesialisasi</p>
+              <p id="gbm-spesialisasi" class="font-label-sm text-ink-black text-sm font-semibold tracking-wide"></p>
+            </div>
+
+          </div>
+
+          <!-- Sertifikasi -->
+          <div class="bg-canvas-off-white p-4 mb-4">
+            <p class="font-label-sm text-ink-black/40 uppercase text-[9px] tracking-widest mb-2">Sertifikasi</p>
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-crimson-heritage flex-shrink-0" style="font-size:18px;margin-top:1px">workspace_premium</span>
+              <p id="gbm-sertifikasi" class="font-body-md text-ink-black text-sm leading-relaxed"></p>
+            </div>
+          </div>
+
+          <!-- Motto -->
+          <div class="bg-ink-black p-4">
+            <p class="font-label-sm text-white/40 uppercase text-[9px] tracking-widest mb-2">Motto</p>
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-signal-gold flex-shrink-0" style="font-size:18px;margin-top:1px">format_quote</span>
+              <p id="gbm-motto" class="font-body-md text-white/90 text-sm leading-relaxed italic"></p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Footer strip -->
+        <div class="mt-6 pt-4 border-t border-ink-black/10 flex items-center gap-2">
+          <img src="logo_igs.webp" alt="IGS" style="width:28px;height:28px;border-radius:50%;object-fit:contain;flex-shrink:0">
+          <span class="font-label-sm text-ink-black/40 text-[10px] uppercase tracking-widest">Ignatius Global School — Pengajar World Languages</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /box -->
+</div><!-- /modal -->
+
+<!-- Guru Bahasa Modal Script -->
+<script>
+(function() {
+  /* ── CSS identik dengan siswa-modal ── */
+  const style = document.createElement('style');
+  style.textContent = `
+    #guru-bahasa-modal {
+      position:fixed;inset:0;z-index:9000;
+      display:flex;align-items:center;justify-content:center;
+      padding:16px;
+      opacity:0;pointer-events:none;
+      transition:opacity .35s ease;
+    }
+    #guru-bahasa-modal.open { opacity:1;pointer-events:all; }
+    #guru-bahasa-backdrop {
+      position:absolute;inset:0;background:rgba(13,13,13,0.82);
+      backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    }
+    #guru-bahasa-box {
+      position:relative;z-index:1;
+      background:#fff;
+      max-width:780px;width:100%;
+      display:flex;flex-direction:column;
+      transform:translateY(28px) scale(0.97);
+      transition:transform .35s cubic-bezier(.16,1,.3,1);
+      max-height:90vh;overflow:hidden;
+      height:90vh;
+    }
+    #guru-bahasa-modal.open #guru-bahasa-box { transform:translateY(0) scale(1); }
+    #guru-bahasa-close {
+      position:absolute;top:16px;right:16px;z-index:10;
+      width:36px;height:36px;background:rgba(13,13,13,0.65);
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;border:none;color:#fff;
+      transition:background .2s;border-radius:0;
+    }
+    #guru-bahasa-close:hover { background:#A50000; }
+  `;
+  document.head.appendChild(style);
+})();
+
+function openGuruBahasaModal(card) {
+  const d = card.dataset;
+  const modal = document.getElementById('guru-bahasa-modal');
+
+  document.getElementById('gbm-foto').src          = d.foto || '';
+  document.getElementById('gbm-foto').alt          = d.nama || '';
+  document.getElementById('gbm-nama').textContent  = d.nama || '—';
+  document.getElementById('gbm-asal').textContent  = d.asal || '—';
+  document.getElementById('gbm-ttl').textContent   = d.ttl  || '—';
+  document.getElementById('gbm-pendidikan').textContent   = d.pendidikan  || '—';
+  document.getElementById('gbm-pengalaman').textContent   = d.pengalaman  || '—';
+  document.getElementById('gbm-spesialisasi').textContent = d.spesialisasi || '—';
+  document.getElementById('gbm-sertifikasi').textContent  = d.sertifikasi  || '—';
+  document.getElementById('gbm-motto').textContent = d.motto || '—';
+  document.getElementById('gbm-label').textContent = 'Guru ' + (d.bahasa || '');
+  document.getElementById('gbm-badge').textContent = (d.flag || '') + ' ' + (d.bahasa || '');
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeGuruBahasaModal() {
+  document.getElementById('guru-bahasa-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeGuruBahasaModal();
+});
+</script>
 
 <!-- ═══════════════════ KARYAWAN / GURU ═══════════════════ -->
 <section id="karyawan" class="py-vertical-gap bg-canvas-off-white overflow-hidden">
@@ -4619,21 +4888,27 @@ document.addEventListener('keydown', function(e) {
   <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter relative z-10">
     <!-- Col 1: Brand -->
     <div class="col-span-1 md:col-span-1">
-      <span class="font-display-lg italic text-[3rem] text-crimson-heritage block mb-4">IGS</span>
+      <img src="logo_igs.webp" alt="IGS Logo" class="block mb-4" style="height:72px;width:auto;object-fit:contain">
       <p class="text-xs uppercase tracking-widest text-canvas-off-white/40 mb-4">Ignatius Global School</p>
       <p class="font-body-md max-w-xs opacity-60 text-sm">Providing a global curriculum with architectural precision in character development and academic rigor.</p>
       <!-- Social icons -->
       <div class="flex gap-4 mt-8">
-        <a href="#" class="w-10 h-10 flex items-center justify-center border border-white/20 hover:border-crimson-heritage hover:bg-crimson-heritage transition-all duration-300 group">
+        <a href="https://www.instagram.com/ignatiusglobal.sch" target="_blank" rel="noopener noreferrer" title="Instagram IGS — @ignatiusglobal.sch" class="w-10 h-10 flex items-center justify-center border border-white/20 hover:border-crimson-heritage hover:bg-crimson-heritage transition-all duration-300 group">
           <!-- Instagram SVG -->
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/70 group-hover:text-white">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
           </svg>
         </a>
-        <a href="#" class="w-10 h-10 flex items-center justify-center border border-white/20 hover:border-crimson-heritage hover:bg-crimson-heritage transition-all duration-300 group">
+        <a href="https://www.youtube.com/c/IgnatiusGlobalSchool" target="_blank" rel="noopener noreferrer" title="YouTube IGS — Ignatius Global School" class="w-10 h-10 flex items-center justify-center border border-white/20 hover:border-crimson-heritage hover:bg-crimson-heritage transition-all duration-300 group">
           <!-- YouTube SVG -->
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/70 group-hover:text-white">
             <rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+        <a href="https://www.facebook.com/igshighschool" target="_blank" rel="noopener noreferrer" title="Facebook IGS — igshighschool" class="w-10 h-10 flex items-center justify-center border border-white/20 hover:border-crimson-heritage hover:bg-crimson-heritage transition-all duration-300 group">
+          <!-- Facebook SVG -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-white/70 group-hover:text-white">
+            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
           </svg>
         </a>
       </div>
@@ -4642,10 +4917,30 @@ document.addEventListener('keydown', function(e) {
     <div>
       <h5 class="font-label-sm uppercase tracking-widest text-signal-gold mb-8">Navigation</h5>
       <ul class="space-y-4 text-sm">
-        <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#">Heritage</a></li>
-        <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#">Foundation</a></li>
-        <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#">Academic Journal</a></li>
-        <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#">Campus Map</a></li>
+        <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#banner-carousel">Home</a></li>
+        <li>
+          <p class="text-canvas-off-white/30 uppercase text-[10px] tracking-widest font-label-sm mb-2">Menu</p>
+          <ul class="space-y-3 pl-3 border-l border-white/10">
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#karyawan">Karyawan</a></li>
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#staff">Staff</a></li>
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#siswa">Siswa</a></li>
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#osis">OSIS</a></li>
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#alumni">Alumni</a></li>
+          </ul>
+        </li>
+        <li>
+          <p class="text-canvas-off-white/30 uppercase text-[10px] tracking-widest font-label-sm mb-2 mt-2">Informasi Sekolah</p>
+          <ul class="space-y-3 pl-3 border-l border-white/10">
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#pimpinan">Profil Sekolah</a></li>
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#prestasi">Prestasi IGS</a></li>
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#berita">Berita</a></li>
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#galeri">Gallery IGS</a></li>
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#administrasi">Administrasi</a></li>
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#karier">Karier</a></li>
+            <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all" href="#moodle">Moodle IGS</a></li>
+          </ul>
+        </li>
+        <li><a class="text-canvas-off-white opacity-60 hover:opacity-100 hover:text-crimson-heritage transition-all font-semibold" href="#kontak">PPDB</a></li>
       </ul>
     </div>
     <!-- Col 3: Connect -->
